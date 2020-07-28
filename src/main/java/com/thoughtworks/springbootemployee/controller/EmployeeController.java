@@ -13,7 +13,8 @@ import java.util.stream.Collectors;
 @RequestMapping("/employees")
 public class EmployeeController {
     private static final EmployeeData employeeData = new EmployeeData();
-
+    private static final String SUCCESS_MESSAGE = "success";
+    private static final String FAIL_MESSAGE = "fail";
     @GetMapping
     public List<Employee> getAllEmployee(@RequestParam(name = "page", required = false) Integer page,
                                          @RequestParam(name = "pageSize", required = false) Integer pageSize,
@@ -35,17 +36,16 @@ public class EmployeeController {
     public Employee getEmployeeByEmployeeId(@PathVariable int employeeId) {
         return employeeData.getEmployees().stream().filter(employee -> {
             return employeeId == employee.getId();
-        }).
-                findFirst().orElse(null);
+        }).findFirst().orElse(null);
     }
 
     @PostMapping
     public String addEmployee(@RequestBody Employee employee){
         if(employee!=null){
             employeeData.getEmployees().add(employee);
-            return "success";
+            return SUCCESS_MESSAGE;
         }
-        return "fail";
+        return FAIL_MESSAGE;
     }
 
     @PutMapping("/{employeeId}")
@@ -56,9 +56,9 @@ public class EmployeeController {
 
         if(employee!=null&&modifyEmployee!=null){
             employeeData.getEmployees().set(employeeData.getEmployees().indexOf(employee),modifyEmployee);
-            return "success";
+            return SUCCESS_MESSAGE;
         }
-        return "fail";
+        return FAIL_MESSAGE;
     }
 
     @DeleteMapping("/{employeeId}")
@@ -69,9 +69,9 @@ public class EmployeeController {
 
         if(deleteEmployee!=null){
             employeeData.getEmployees().remove(deleteEmployee);
-            return "success";
+            return SUCCESS_MESSAGE;
         }
-        return "fail";
+        return FAIL_MESSAGE;
     }
 
 
