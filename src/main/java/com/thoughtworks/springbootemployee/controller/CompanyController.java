@@ -1,5 +1,6 @@
 package com.thoughtworks.springbootemployee.controller;
 
+import com.thoughtworks.springbootemployee.Message.ResponseMessage;
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.CompanyData;
 import com.thoughtworks.springbootemployee.model.Employee;
@@ -15,9 +16,6 @@ import java.util.stream.Collectors;
 public class CompanyController {
     private static final CompanyData companyData = new CompanyData();
     private static final EmployeeData employeeData = new EmployeeData();
-    private static final String SUCCESS_MESSAGE = "success";
-    private static final String FAIL_MESSAGE = "fail";
-
     @GetMapping
     public List<Company> getAllCompany(@RequestParam(name = "page", required = false) Integer page,
                                        @RequestParam(name = "pageSize", required = false) Integer pageSize) {
@@ -58,9 +56,9 @@ public class CompanyController {
             companyData.getCompanies().add(company);
         }
         if (companyData.getCompanies().contains(company)) {
-            return SUCCESS_MESSAGE;
+            return ResponseMessage.SUCCESS_MESSAGE;
         }
-        return FAIL_MESSAGE;
+        return ResponseMessage.FAIL_MESSAGE;
     }
 
     @PutMapping("/{companyId}")
@@ -71,10 +69,10 @@ public class CompanyController {
             }).findFirst().orElse(null);
             if (modifyCompany != null) {
                 companyData.getCompanies().set(companyData.getCompanies().indexOf(modifyCompany), company);
-                return SUCCESS_MESSAGE;
+                return ResponseMessage.SUCCESS_MESSAGE;
             }
         }
-        return FAIL_MESSAGE;
+        return ResponseMessage.FAIL_MESSAGE;
     }
     @DeleteMapping("/{companyId}")
     public String deleteCompanyByCompanyId(@PathVariable int companyId){
@@ -84,9 +82,9 @@ public class CompanyController {
 
         if(deleteCompany!=null){
             companyData.getCompanies().remove(deleteCompany);
-            return SUCCESS_MESSAGE;
+            return ResponseMessage.SUCCESS_MESSAGE;
         }
-        return FAIL_MESSAGE;
+        return ResponseMessage.FAIL_MESSAGE;
     }
 
 }
