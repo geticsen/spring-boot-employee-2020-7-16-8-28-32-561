@@ -13,8 +13,8 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/companies")
 public class CompanyController {
-    private static CompanyData companyData = new CompanyData();
-    private static EmployeeData employeeData = new EmployeeData();
+    private static final CompanyData companyData = new CompanyData();
+    private static final EmployeeData employeeData = new EmployeeData();
 
     @GetMapping
     public List<Company> getAllCompany(@RequestParam(name = "page", required = false) Integer page, @RequestParam(name = "pageSize", required = false) Integer pageSize) {
@@ -85,6 +85,5 @@ public class CompanyController {
         }
         return "fail";
     }
-
 
 }
