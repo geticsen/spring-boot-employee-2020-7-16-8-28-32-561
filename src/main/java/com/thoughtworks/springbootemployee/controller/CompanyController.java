@@ -1,6 +1,7 @@
 package com.thoughtworks.springbootemployee.controller;
 
 import com.thoughtworks.springbootemployee.model.Company;
+import com.thoughtworks.springbootemployee.model.CompanyData;
 import com.thoughtworks.springbootemployee.model.Employee;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,22 +11,13 @@ import java.util.List;
 @RestController
 @RequestMapping("/companies")
 public class CompanyController {
+    private static CompanyData companyData=new CompanyData();
     @GetMapping
     public List<Company> getAllCompany(@RequestParam(name = "page" ,required = false) Integer page,@RequestParam(name = "pageSize",required = false) Integer pageSize){
-        List<Company> companies=new ArrayList<>();
-        companies.add(new Company(1,"ali",1));
-        companies.add(new Company(2,"tx",2));
-        companies.add(new Company(3,"hw",3));
-        companies.add(new Company(4,"zj",3));
-        companies.add(new Company(5,"oocl",3));
-        companies.add(new Company(6,"yy",3));
-        companies.add(new Company(7,"meituan",3));
-
         if(page!=null&&pageSize!=null){
-            return companies.subList(--page,--pageSize);
+            return companyData.getCompanies().subList(--page,--pageSize);
         }
-
-        return companies;
+        return companyData.getCompanies();
     }
 
     @GetMapping("/{companyId}/employees")
@@ -49,5 +41,10 @@ public class CompanyController {
 
         assert result != null;
         return result.getEmployees();
+    }
+
+    @GetMapping("/companies/{companyId}")
+    public Company getCompanyByCompanyId(@PathVariable int companyId){
+        return null;
     }
 }
