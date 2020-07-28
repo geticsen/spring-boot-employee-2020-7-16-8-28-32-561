@@ -11,17 +11,20 @@ import java.util.List;
 @RequestMapping("/companies")
 public class CompanyController {
     @GetMapping
-    public List<Company> getCompanyByRange(@RequestParam("page") int page,@RequestParam("pageSize") int pageSize){
-        System.out.println(page+" "+pageSize);
-        return null;
-    }
-
-    @GetMapping
-    public List<Company> getAllCompany(){
+    public List<Company> getAllCompany(@RequestParam(name = "page" ,required = false) Integer page,@RequestParam(name = "pageSize",required = false) Integer pageSize){
         List<Company> companies=new ArrayList<>();
         companies.add(new Company(1,"ali",1));
         companies.add(new Company(2,"tx",2));
         companies.add(new Company(3,"hw",3));
+        companies.add(new Company(4,"zj",3));
+        companies.add(new Company(5,"oocl",3));
+        companies.add(new Company(6,"yy",3));
+        companies.add(new Company(7,"meituan",3));
+
+        if(page!=null&&pageSize!=null){
+            return companies.subList(--page,--pageSize);
+        }
+
         return companies;
     }
 
@@ -47,5 +50,4 @@ public class CompanyController {
         assert result != null;
         return result.getEmployees();
     }
-
 }
