@@ -2,10 +2,7 @@ package com.thoughtworks.springbootemployee.controller;
 
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +10,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/companies")
 public class CompanyController {
+    @GetMapping
+    public List<Company> getCompanyByRange(@RequestParam("page") int page,@RequestParam("pageSize") int pageSize){
+        System.out.println(page+" "+pageSize);
+        return null;
+    }
+
     @GetMapping
     public List<Company> getAllCompany(){
         List<Company> companies=new ArrayList<>();
@@ -41,6 +44,7 @@ public class CompanyController {
             return company.getId() == companyId;
         }).findFirst().orElse(null);
 
+        assert result != null;
         return result.getEmployees();
     }
 
