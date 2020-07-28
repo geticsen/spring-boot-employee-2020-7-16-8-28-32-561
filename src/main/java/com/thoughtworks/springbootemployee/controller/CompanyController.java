@@ -7,22 +7,25 @@ import com.thoughtworks.springbootemployee.model.EmployeeData;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/companies")
 public class CompanyController {
-    private static  CompanyData companyData=new CompanyData();
-    private static  EmployeeData employeeData=new EmployeeData();
+    private static CompanyData companyData = new CompanyData();
+    private static EmployeeData employeeData = new EmployeeData();
+
     @GetMapping
-    public List<Company> getAllCompany(@RequestParam(name = "page" ,required = false) Integer page,@RequestParam(name = "pageSize",required = false) Integer pageSize){
-        if(page!=null&&pageSize!=null){
-            return companyData.getCompanies().subList(--page,--pageSize);
+    public List<Company> getAllCompany(@RequestParam(name = "page", required = false) Integer page, @RequestParam(name = "pageSize", required = false) Integer pageSize) {
+        if (page != null && pageSize != null) {
+            return companyData.getCompanies().subList(--page, --pageSize);
         }
         return companyData.getCompanies();
     }
 
     @GetMapping("/{companyId}/employees")
-    public List<Employee> getEmplyeesByCompanyId(@PathVariable int companyId){
+    public List<Employee> getEmplyeesByCompanyId(@PathVariable int companyId) {
         initEmplyeesData(companyId);
         Company result = companyData.getCompanies().stream().filter(company -> {
             return company.getId() == companyId;
@@ -32,29 +35,56 @@ public class CompanyController {
     }
 
     @GetMapping("/{companyId}")
-    public Company getCompanyByCompanyId(@PathVariable int companyId){
+    public Company getCompanyByCompanyId(@PathVariable int companyId) {
         return companyData.getCompanies().stream().filter(company -> {
             return company.getId() == companyId;
         }).findFirst().orElse(null);
     }
 
-    public void initEmplyeesData(int companyId){
+    public void initEmplyeesData(int companyId) {
         Company result = companyData.getCompanies().stream().filter(company -> {
             return company.getId() == companyId;
         }).findFirst().orElse(null);
         assert result != null;
-        result.setEmployees(employeeData.getEmployees().subList(0,3));
+        result.setEmployees(employeeData.getEmployees().subList(0, 3));
     }
 
     @PostMapping
-    public String addCompany(@RequestBody Company company){
-        if(company!=null){
+    public String addCompany(@RequestBody Company company) {
+        if (company != null) {
             companyData.getCompanies().add(company);
         }
-        if(companyData.getCompanies().contains(company)){
+        if (companyData.getCompanies().contains(company)) {
             return "success";
         }
         return "fail";
     }
+
+    @PutMapping("/{companyId}")
+    public String modifyCompanyByCompanyId(@PathVariable int companyId, @RequestBody(required = false) Company company) {
+        if (company != null) {
+            Company modifyCompany = companyData.getCompanies().stream().filter(findCompany -> {
+                return findCompany.getId() == companyId;
+            }).findFirst().orElse(null);
+            if (modifyCompany != null) {
+                companyData.getCompanies().set(companyData.getCompanies().indexOf(modifyCompany), company);
+                if (companyData.getCompanies().contains(company)) return "success";
+            }
+        }
+        return "fail";
+    }
+    @DeleteMapping("/{companyId}")
+    public String deleteCompanyByCompanyId(@PathVariable int companyId){
+        Company deleteCompany = companyData.getCompanies().stream().filter(company -> {
+            return company.getId() == companyId;
+        }).findFirst().orElse(null);
+
+        if(deleteCompany!=null){
+            companyData.getCompanies().remove(deleteCompany);
+            return "success";
+        }
+        return "fail";
+    }
+
 
 }

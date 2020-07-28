@@ -52,4 +52,6 @@ public class Company {
     public void setEmployeesNumber(int employeesNumber) {
         this.employeesNumber = employeesNumber;
     }
+
+
 }
