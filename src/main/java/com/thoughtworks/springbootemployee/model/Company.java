@@ -3,7 +3,7 @@ import java.util.List;
 
 public class Company {
     private int id;
-    private List<employee> employees;
+    private List<Employee> Employees;
     private String companyName;
     private int employeesNumber;
 
@@ -16,9 +16,9 @@ public class Company {
         this.employeesNumber = employeesNumber;
     }
 
-    public Company(int id, List<employee> employees) {
+    public Company(int id, List<Employee> Employees) {
         this.id = id;
-        this.employees = employees;
+        this.Employees = Employees;
     }
 
     public int getId() {
@@ -29,12 +29,12 @@ public class Company {
         this.id = id;
     }
 
-    public List<employee> getEmployees() {
-        return employees;
+    public List<Employee> getEmployees() {
+        return Employees;
     }
 
-    public void setEmployees(List<employee> employees) {
-        this.employees = employees;
+    public void setEmployees(List<Employee> Employees) {
+        this.Employees = Employees;
     }
 
     public String getCompanyName() {
