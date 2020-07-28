@@ -1,5 +1,6 @@
 package com.thoughtworks.springbootemployee.controller;
 
+import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.model.EmployeeData;
 import org.springframework.web.bind.annotation.*;
@@ -46,4 +47,32 @@ public class EmployeeController {
         }
         return "fail";
     }
+
+    @PutMapping("/{employeeId}")
+    public String modifyEmployeeByEmployeeId(@PathVariable int employeeId,@RequestBody Employee modifyEmployee){
+        Employee employee = employeeData.getEmployees().stream().filter(findEmployee -> {
+            return findEmployee.getId() == employeeId;
+        }).findFirst().orElse(null);
+
+        if(employee!=null&&modifyEmployee!=null){
+            employeeData.getEmployees().set(employeeData.getEmployees().indexOf(employee),modifyEmployee);
+            return "success";
+        }
+        return "fail";
+    }
+
+    @DeleteMapping("/{employeeId}")
+    public String deleteEmployeeByEmployeeId(@PathVariable int employeeId){
+        Employee deleteEmployee = employeeData.getEmployees().stream().filter(employee -> {
+            return employee.getId() == employeeId;
+        }).findFirst().orElse(null);
+
+        if(deleteEmployee!=null){
+            employeeData.getEmployees().remove(deleteEmployee);
+            return "success";
+        }
+        return "fail";
+    }
+
+
 }
