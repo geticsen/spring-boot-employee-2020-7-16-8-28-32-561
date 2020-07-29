@@ -33,12 +33,7 @@ public class CompanyController {
     @GetMapping("/{companyId}/employees")
     @ResponseStatus(HttpStatus.OK)
     public List<Employee> getEmplyeesByCompanyId(@PathVariable int companyId) {
-        initEmplyeesData(companyId);
-        Company result = companyData.getCompanies().stream().filter(company -> {
-            return company.getId() == companyId;
-        }).findFirst().orElse(null);
-        assert result != null;
-        return result.getEmployees();
+        return companyService.getEmployeesByCompanyId(companyId);
     }
 
     @GetMapping("/{companyId}")
