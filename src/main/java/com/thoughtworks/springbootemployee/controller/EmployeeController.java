@@ -3,6 +3,9 @@ package com.thoughtworks.springbootemployee.controller;
 import com.thoughtworks.springbootemployee.message.ResponseMessage;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.model.EmployeeData;
+import com.thoughtworks.springbootemployee.service.EmployeeService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -12,34 +15,34 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/employees")
 public class EmployeeController {
+    @Autowired
+    private EmployeeService employeeService;
     private static final EmployeeData employeeData = new EmployeeData();
+
     @GetMapping
+    @ResponseStatus(HttpStatus.OK)
     public List<Employee> getAllEmployee(@RequestParam(name = "page", required = false) Integer page,
                                          @RequestParam(name = "pageSize", required = false) Integer pageSize,
                                          @RequestParam(name = "gender", required = false) String gender) {
-        List<Employee> employees = new ArrayList<>(employeeData.getEmployees());
+        List<Employee> employees = new ArrayList<>();
         if (page != null && pageSize != null) {
-            employees = employees.subList(--page, --pageSize);
-        }
-        System.out.println(gender);
-        if (gender != null) {
-            employees = employees.stream().filter(employee -> {
-                return employee.getGender().equals(gender);
-            }).collect(Collectors.toList());
+            employees = employeeService.getEmployeeByPageAndPageSize(page, pageSize).getContent();
+        } else if (gender != null) {
+            employees = employeeService.getEmployeeByGender(gender);
+        } else {
+            employees = employeeService.getAllEmployees();
         }
         return employees;
     }
 
     @GetMapping("/{employeeId}")
     public Employee getEmployeeByEmployeeId(@PathVariable int employeeId) {
-        return employeeData.getEmployees().stream().filter(employee -> {
-            return employeeId == employee.getId();
-        }).findFirst().orElse(null);
+        return employeeService.getEmployeeByEmployeeId(employeeId);
     }
 
     @PostMapping
-    public String addEmployee(@RequestBody Employee employee){
-        if(employee!=null){
+    public String addEmployee(@RequestBody Employee employee) {
+        if (employee != null) {
             employeeData.getEmployees().add(employee);
             return ResponseMessage.SUCCESS_MESSAGE;
         }
@@ -47,25 +50,25 @@ public class EmployeeController {
     }
 
     @PutMapping("/{employeeId}")
-    public String modifyEmployeeByEmployeeId(@PathVariable int employeeId,@RequestBody Employee modifyEmployee){
+    public String modifyEmployeeByEmployeeId(@PathVariable int employeeId, @RequestBody Employee modifyEmployee) {
         Employee employee = employeeData.getEmployees().stream().filter(findEmployee -> {
             return findEmployee.getId() == employeeId;
         }).findFirst().orElse(null);
 
-        if(employee!=null&&modifyEmployee!=null){
-            employeeData.getEmployees().set(employeeData.getEmployees().indexOf(employee),modifyEmployee);
+        if (employee != null && modifyEmployee != null) {
+            employeeData.getEmployees().set(employeeData.getEmployees().indexOf(employee), modifyEmployee);
             return ResponseMessage.SUCCESS_MESSAGE;
         }
         return ResponseMessage.FAIL_MESSAGE;
     }
 
     @DeleteMapping("/{employeeId}")
-    public String deleteEmployeeByEmployeeId(@PathVariable int employeeId){
+    public String deleteEmployeeByEmployeeId(@PathVariable int employeeId) {
         Employee deleteEmployee = employeeData.getEmployees().stream().filter(employee -> {
             return employee.getId() == employeeId;
         }).findFirst().orElse(null);
 
-        if(deleteEmployee!=null){
+        if (deleteEmployee != null) {
             employeeData.getEmployees().remove(deleteEmployee);
             return ResponseMessage.SUCCESS_MESSAGE;
         }
