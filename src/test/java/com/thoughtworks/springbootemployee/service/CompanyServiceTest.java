@@ -15,6 +15,7 @@ import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 
 
@@ -57,7 +58,7 @@ public class CompanyServiceTest {
         Objects.requireNonNull(companies.stream().filter(company -> company.getId() == companyId).findFirst().orElse(null)).setEmployees(employees);
 //        when
         CompanyRepository companyRepository = mock(CompanyRepository.class);
-        given(companyRepository.findById(companyId)).willReturn(employees);
+        given(companyRepository.findById(companyId).orElse(null).getEmployees()).willReturn(employees);
         CompanyService companyService = new CompanyService(companyRepository);
         List<Employee> getEmployees = companyService.getEmployeesByCompanyId(companyId);
 //        then
@@ -116,7 +117,7 @@ public class CompanyServiceTest {
         int companyID = 1;
         String message = "success";
         CompanyRepository companyRepository = mock(CompanyRepository.class);
-        given(companyRepository.deleteById(companyID)).willReturn(message);
+        doAnswer(invocation -> null).when(companyRepository).deleteById(companyID);
         CompanyService companyService = new CompanyService(companyRepository);
 //        when
         String backMessage = companyService.deleteCompanyByCompanyID(companyID);
