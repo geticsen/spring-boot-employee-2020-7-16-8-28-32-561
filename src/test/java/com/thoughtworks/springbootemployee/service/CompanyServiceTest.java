@@ -6,6 +6,9 @@ import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.model.EmployeeData;
 import com.thoughtworks.springbootemployee.repository.CompanyRepository;
 import org.junit.jupiter.api.Test;
+import org.mockito.BDDMockito;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
 import java.util.Objects;
@@ -22,7 +25,7 @@ public class CompanyServiceTest {
         List<Company> companies = new CompanyData().getCompanies();
 //        when
         CompanyRepository companyRepository = mock(CompanyRepository.class);
-        given(companyRepository.getAll()).willReturn(companies);
+        given(companyRepository.findAll()).willReturn(companies);
         CompanyService companyService = new CompanyService(companyRepository);
         List<Company> getCompanies = companyService.getAll();
 //        then
@@ -38,7 +41,7 @@ public class CompanyServiceTest {
                 .filter(company -> company.getId() == companyId).findFirst().orElse(null);
 //        when
         CompanyRepository companyRepository = mock(CompanyRepository.class);
-        given(companyRepository.getCompanyByCompanyId(companyId)).willReturn(filterCompany);
+        given(companyRepository.findById(companyId)).willReturn(java.util.Optional.ofNullable(filterCompany));
         CompanyService companyService = new CompanyService(companyRepository);
         Company getCompany = companyService.getCompanyByCompanyId(companyId);
 //        then
@@ -54,7 +57,7 @@ public class CompanyServiceTest {
         Objects.requireNonNull(companies.stream().filter(company -> company.getId() == companyId).findFirst().orElse(null)).setEmployees(employees);
 //        when
         CompanyRepository companyRepository = mock(CompanyRepository.class);
-        given(companyRepository.getEmployeesByCompanyId(companyId)).willReturn(employees);
+        given(companyRepository.findById(companyId)).willReturn(employees);
         CompanyService companyService = new CompanyService(companyRepository);
         List<Employee> getEmployees = companyService.getEmployeesByCompanyId(companyId);
 //        then
@@ -69,13 +72,13 @@ public class CompanyServiceTest {
         List<Company> companies = new CompanyData().getCompanies();
         List<Company> subCompanies = companies.subList((page - 1) * pageSize, page * pageSize);
         CompanyRepository companyRepository = mock(CompanyRepository.class);
-        given(companyRepository.getCompaniesByPageAndPageSize(page,pageSize)).willReturn(subCompanies);
+        given(companyRepository.findAll(PageRequest.of(page,pageSize))).willReturn((Page<Company>) subCompanies);
         CompanyService companyService = new CompanyService(companyRepository);
 //        when
-        List<Company> getCompanies = companyService.getCompaniesByPageAndPageSize(page,pageSize);
+        Page<Company> getCompanies = companyService.getCompaniesByPageAndPageSize(page,pageSize);
 //        then
-        assertEquals(subCompanies.size(), getCompanies.size());
-        assertEquals(subCompanies.get(0).getId(), getCompanies.get(0).getId());
+        assertEquals(subCompanies.size(), getCompanies.getContent().size());
+        assertEquals(subCompanies.get(0).getId(), getCompanies.getContent().get(0).getId());
     }
 
     @Test
@@ -83,7 +86,7 @@ public class CompanyServiceTest {
 //        given
         Company company = new Company(1,"oocl",1000);
         CompanyRepository companyRepository = mock(CompanyRepository.class);
-        given(companyRepository.addCompany(company)).willReturn(company);
+        given(companyRepository.save(company)).willReturn(company);
         CompanyService companyService = new CompanyService(companyRepository);
 //        when
         Company createdCompany = companyService.addCompany(company);
@@ -98,7 +101,7 @@ public class CompanyServiceTest {
         Company company = new Company(companyId,"oocl",1000);
         Company companyInfo = new Company(companyId,"ali",1);
         CompanyRepository companyRepository = mock(CompanyRepository.class);
-        given(companyRepository.updateCompany(companyId,companyInfo)).willReturn(companyInfo);
+        given(companyRepository.save(companyInfo)).willReturn(companyInfo);
         CompanyService companyService = new CompanyService(companyRepository);
 //        when
         Company updatedCompany = companyService.updateCompany(companyId,companyInfo);
@@ -113,7 +116,7 @@ public class CompanyServiceTest {
         int companyID = 1;
         String message = "success";
         CompanyRepository companyRepository = mock(CompanyRepository.class);
-        given(companyRepository.deleteCompanyByCompanyID(companyID)).willReturn(message);
+        given(companyRepository.deleteById(companyID)).willReturn(message);
         CompanyService companyService = new CompanyService(companyRepository);
 //        when
         String backMessage = companyService.deleteCompanyByCompanyID(companyID);
