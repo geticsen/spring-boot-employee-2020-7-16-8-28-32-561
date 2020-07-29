@@ -25,7 +25,7 @@ public class CompanyController {
     public List<Company> getAllCompany(@RequestParam(name = "page", required = false) Integer page,
                                        @RequestParam(name = "pageSize", required = false) Integer pageSize) {
         if (page != null && pageSize != null) {
-            return  companyService.getCompaniesByPageAndPageSize(page,pageSize).getContent();
+            return companyService.getCompaniesByPageAndPageSize(page, pageSize).getContent();
         }
         return companyService.getAll();
     }
@@ -57,24 +57,19 @@ public class CompanyController {
     public Company addCompany(@RequestBody Company company) {
         if (company != null) {
             return companyService.addCompany(company);
-        }else {
+        } else {
             return null;
         }
     }
 
     @PutMapping("/{companyId}")
     @ResponseStatus(HttpStatus.OK)
-    public String modifyCompanyByCompanyId(@PathVariable int companyId, @RequestBody(required = false) Company company) {
+    public Company modifyCompanyByCompanyId(@PathVariable int companyId, @RequestBody(required = false) Company company) {
         if (company != null) {
-            Company modifyCompany = companyData.getCompanies().stream().filter(findCompany -> {
-                return findCompany.getId() == companyId;
-            }).findFirst().orElse(null);
-            if (modifyCompany != null) {
-                companyData.getCompanies().set(companyData.getCompanies().indexOf(modifyCompany), company);
-                return ResponseMessage.SUCCESS_MESSAGE;
-            }
+            return companyService.updateCompany(companyId, company);
+        } else {
+            return null;
         }
-        return ResponseMessage.FAIL_MESSAGE;
     }
 
     @DeleteMapping("/{companyId}")
