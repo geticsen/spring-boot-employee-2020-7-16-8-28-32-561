@@ -44,4 +44,8 @@ public class EmployeeRepository {
                 .collect(Collectors.toList());
 
     }
+
+    public Object addEmployee(Employee employee) {
+        return null;
+    }
 }

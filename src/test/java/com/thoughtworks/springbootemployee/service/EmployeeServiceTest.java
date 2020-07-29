@@ -82,4 +82,17 @@ public class EmployeeServiceTest {
         int randInt = random.nextInt(filterEmployees.size());
         assertEquals(gender,maleEmployees.get(randInt).getGender());
     }
+
+    @Test
+    void should_return_new_employee_when_add_employee_given_employee() {
+//        given
+        Employee employee = new Employee(1, "kiki", 18, "female", 99999);
+        EmployeeRepository employeeRepository = mock(EmployeeRepository.class);
+        given(employeeRepository.addEmployee(employee)).willReturn(employee);
+        EmployeeService employeeService = new EmployeeService(employeeRepository);
+//        when
+        Employee createdEmployee = employeeService.addEmployee(employee);
+//        then
+        assertEquals(employee,createdEmployee);
+    }
 }
