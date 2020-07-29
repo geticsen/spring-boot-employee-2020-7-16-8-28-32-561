@@ -28,4 +28,8 @@ public class CompanyRepository {
     public Company updateCompany(int companyId, Company companyInfo) {
         return null;
     }
+
+    public Object deleteCompanyByCompanyID(int companyID) {
+        return null;
+    }
 }

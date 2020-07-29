@@ -108,4 +108,18 @@ public class CompanyServiceTest {
         assertEquals(companyInfo.getCompanyName(),updatedCompany.getCompanyName());
         assertEquals(companyInfo.getEmployeesNumber(),updatedCompany.getEmployeesNumber());
     }
+
+    @Test
+    void should_return_success_message_when_delete_company_given_company_id() {
+//        given
+        int companyID = 1;
+        String message = "success";
+        CompanyRepository companyRepository = mock(CompanyRepository.class);
+        given(companyRepository.deleteCompanyByCompanyID(companyID)).willReturn(message);
+        CompanyService companyService = new CompanyService(companyRepository);
+//        when
+        String backMessage = companyService.deleteCompanyByCompanyID(companyID);
+//        then
+        assertEquals(message,backMessage);
+    }
 }
