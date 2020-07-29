@@ -5,6 +5,7 @@ import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.CompanyData;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.model.EmployeeData;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,19 +15,21 @@ import java.util.List;
 public class CompanyController {
     private static final CompanyData companyData = new CompanyData();
     private static final EmployeeData employeeData = new EmployeeData();
-    // todo pagesize
+
     @GetMapping
+    @ResponseStatus(HttpStatus.OK)
     public List<Company> getAllCompany(@RequestParam(name = "page", required = false) Integer page,
                                        @RequestParam(name = "pageSize", required = false) Integer pageSize) {
         if (page != null && pageSize != null) {
-            int start = --page*pageSize;
-            int end = ++page*pageSize;
+            int start = --page * pageSize;
+            int end = ++page * pageSize;
             return companyData.getCompanies().subList(start, end);
         }
         return companyData.getCompanies();
     }
 
     @GetMapping("/{companyId}/employees")
+    @ResponseStatus(HttpStatus.OK)
     public List<Employee> getEmplyeesByCompanyId(@PathVariable int companyId) {
         initEmplyeesData(companyId);
         Company result = companyData.getCompanies().stream().filter(company -> {
@@ -37,6 +40,7 @@ public class CompanyController {
     }
 
     @GetMapping("/{companyId}")
+    @ResponseStatus(HttpStatus.OK)
     public Company getCompanyByCompanyId(@PathVariable int companyId) {
         return companyData.getCompanies().stream().filter(company -> {
             return company.getId() == companyId;
@@ -52,6 +56,7 @@ public class CompanyController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public String addCompany(@RequestBody Company company) {
         if (company != null) {
             companyData.getCompanies().add(company);
@@ -63,6 +68,7 @@ public class CompanyController {
     }
 
     @PutMapping("/{companyId}")
+    @ResponseStatus(HttpStatus.OK)
     public String modifyCompanyByCompanyId(@PathVariable int companyId, @RequestBody(required = false) Company company) {
         if (company != null) {
             Company modifyCompany = companyData.getCompanies().stream().filter(findCompany -> {
@@ -75,13 +81,15 @@ public class CompanyController {
         }
         return ResponseMessage.FAIL_MESSAGE;
     }
+
     @DeleteMapping("/{companyId}")
-    public String deleteCompanyByCompanyId(@PathVariable int companyId){
+    @ResponseStatus(HttpStatus.OK)
+    public String deleteCompanyByCompanyId(@PathVariable int companyId) {
         Company deleteCompany = companyData.getCompanies().stream().filter(company -> {
             return company.getId() == companyId;
         }).findFirst().orElse(null);
 
-        if(deleteCompany!=null){
+        if (deleteCompany != null) {
             deleteCompany.getEmployees().forEach(employee -> {
                 employeeData.getEmployees().remove(employee);
             });
