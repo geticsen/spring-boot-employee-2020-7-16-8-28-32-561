@@ -21,7 +21,7 @@ public class CompanyRepository {
         return null;
     }
 
-    public Object addCompany(Company company) {
+    public Company addCompany(Company company) {
         return null;
     }
 }
