@@ -2,7 +2,6 @@ package com.thoughtworks.springbootemployee.service;
 
 import com.thoughtworks.springbootemployee.message.ResponseMessage;
 import com.thoughtworks.springbootemployee.model.Employee;
-import com.thoughtworks.springbootemployee.model.EmployeeData;
 import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -45,6 +44,7 @@ public class EmployeeService {
     }
 
     public Employee updateEmployee(int employeeID, Employee updateEmployee) {
+        //todo may be can delete
         Employee employee = employeeRepository.findById(employeeID).orElse(null);
         employee.setAge(updateEmployee.getAge());
         employee.setGender(updateEmployee.getGender());

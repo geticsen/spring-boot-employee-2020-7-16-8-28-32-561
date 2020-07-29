@@ -4,11 +4,12 @@ import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.model.EmployeeData;
 import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
 import org.junit.jupiter.api.Test;
-import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -37,7 +38,8 @@ public class EmployeeServiceTest {
 //        given
         Employee employee = new Employee(1, "kiki", 18, "female", 99999);
         EmployeeRepository employeeRepository = mock(EmployeeRepository.class);
-        given(employeeRepository.findById(employee.getId()).orElse(null)).willReturn(employee);
+        Optional<Employee> optional = Optional.of(employee);
+        given(employeeRepository.findById(employee.getId())).willReturn(optional);
         EmployeeService employeeService = new EmployeeService(employeeRepository);
 //        when
         Employee getEmployee = employeeService.getEmployeeByEmployeeId(employee.getId());
@@ -55,7 +57,8 @@ public class EmployeeServiceTest {
         employeeList.add(new Employee(0, "kiki", 18, "female", 99999));
         employeeList.add(new Employee(1, "kiki", 18, "female", 99999));
         EmployeeRepository employeeRepository = mock(EmployeeRepository.class);
-        given(employeeRepository.findAll(PageRequest.of(page, pageSize))).willReturn((Page<Employee>) employeeList);
+        PageImpl<Employee> employeesPageImpl = new PageImpl<>(employeeList,PageRequest.of(page,pageSize),employeeList.size());
+        given(employeeRepository.findAll(PageRequest.of(page, pageSize))).willReturn(employeesPageImpl);
         EmployeeService employeeService = new EmployeeService(employeeRepository);
 //        when
         List<Employee> employees = employeeService.getEmployeeByPageAndPageSize(page, pageSize).getContent();
