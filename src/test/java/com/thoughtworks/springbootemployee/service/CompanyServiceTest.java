@@ -5,8 +5,10 @@ import com.thoughtworks.springbootemployee.model.CompanyData;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.model.EmployeeData;
 import com.thoughtworks.springbootemployee.repository.CompanyRepository;
+import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -59,5 +61,22 @@ public class CompanyServiceTest {
         List<Employee> getEmployees = companyService.getEmployeesByCompanyId(companyId);
 //        then
         assertEquals(employees.size(),getEmployees.size());
+    }
+
+    @Test
+    void should_return_companies_when_get_companies_given_page_and_page_size() {
+//        given
+        int page = 1;
+        int pageSize = 2;
+        List<Company> companies = new CompanyData().getCompanies();
+        List<Company> subCompanies = companies.subList((page - 1) * pageSize, page * pageSize);
+        CompanyRepository companyRepository = mock(CompanyRepository.class);
+        given(companyRepository.getCompaniesByPageAndPageSize(page,pageSize)).willReturn(subCompanies);
+        CompanyService companyService = new CompanyService(companyRepository);
+//        when
+        List<Company> getCompanies = companyService.getCompaniesByPageAndPageSize(page,pageSize);
+//        then
+        assertEquals(companies.size(), getCompanies.size());
+        assertEquals(companies.get(0).getId(), getCompanies.get(0).getId());
     }
 }

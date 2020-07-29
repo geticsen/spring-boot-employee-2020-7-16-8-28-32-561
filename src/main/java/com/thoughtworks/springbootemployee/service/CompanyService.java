@@ -25,4 +25,8 @@ public class CompanyService {
     public List<Employee> getEmployeesByCompanyId(int companyId) {
         return companyRepository.getEmployeesByCompanyId(companyId);
     }
+
+    public List<Company> getCompaniesByPageAndPageSize(int page, int pageSize) {
+        return null;
+    }
 }
