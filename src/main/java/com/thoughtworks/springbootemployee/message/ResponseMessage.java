@@ -1,4 +1,4 @@
-package com.thoughtworks.springbootemployee.Message;
+package com.thoughtworks.springbootemployee.message;
 
 public class ResponseMessage {
     public static final String SUCCESS_MESSAGE = "success";
