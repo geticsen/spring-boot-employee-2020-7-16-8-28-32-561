@@ -1,6 +1,6 @@
 package com.thoughtworks.springbootemployee.controller;
 
-import com.thoughtworks.springbootemployee.Message.ResponseMessage;
+import com.thoughtworks.springbootemployee.message.ResponseMessage;
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.CompanyData;
 import com.thoughtworks.springbootemployee.model.Employee;
@@ -8,19 +8,20 @@ import com.thoughtworks.springbootemployee.model.EmployeeData;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/companies")
 public class CompanyController {
     private static final CompanyData companyData = new CompanyData();
     private static final EmployeeData employeeData = new EmployeeData();
+    // todo pagesize
     @GetMapping
     public List<Company> getAllCompany(@RequestParam(name = "page", required = false) Integer page,
                                        @RequestParam(name = "pageSize", required = false) Integer pageSize) {
         if (page != null && pageSize != null) {
-            return companyData.getCompanies().subList(--page, --pageSize);
+            int start = --page*pageSize;
+            int end = ++page*pageSize;
+            return companyData.getCompanies().subList(start, end);
         }
         return companyData.getCompanies();
     }
