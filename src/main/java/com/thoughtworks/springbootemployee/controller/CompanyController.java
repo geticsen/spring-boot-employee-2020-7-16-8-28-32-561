@@ -75,18 +75,7 @@ public class CompanyController {
     @DeleteMapping("/{companyId}")
     @ResponseStatus(HttpStatus.OK)
     public String deleteCompanyByCompanyId(@PathVariable int companyId) {
-        Company deleteCompany = companyData.getCompanies().stream().filter(company -> {
-            return company.getId() == companyId;
-        }).findFirst().orElse(null);
-
-        if (deleteCompany != null) {
-            deleteCompany.getEmployees().forEach(employee -> {
-                employeeData.getEmployees().remove(employee);
-            });
-            companyData.getCompanies().remove(deleteCompany);
-            return ResponseMessage.SUCCESS_MESSAGE;
-        }
-        return ResponseMessage.FAIL_MESSAGE;
+        return companyService.deleteCompanyByCompanyID(companyId);
     }
 
 }
