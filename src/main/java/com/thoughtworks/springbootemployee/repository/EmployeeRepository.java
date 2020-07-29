@@ -53,7 +53,7 @@ public class EmployeeRepository {
         return updateEmployee;
     }
 
-    public Object deleteEmployeeByemployeeID(int employeeID) {
+    public String deleteEmployeeByemployeeID(int employeeID) {
         return null;
     }
 }

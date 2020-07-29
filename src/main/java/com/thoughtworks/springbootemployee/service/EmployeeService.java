@@ -43,6 +43,6 @@ public class EmployeeService {
     }
 
     public String deleteEmployeeByemployeeID(int employeeID) {
-        return null;
+        return employeeRepository.deleteEmployeeByemployeeID(employeeID);
     }
 }
