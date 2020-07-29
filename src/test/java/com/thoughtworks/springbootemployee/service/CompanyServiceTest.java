@@ -76,7 +76,7 @@ public class CompanyServiceTest {
 //        when
         List<Company> getCompanies = companyService.getCompaniesByPageAndPageSize(page,pageSize);
 //        then
-        assertEquals(companies.size(), getCompanies.size());
-        assertEquals(companies.get(0).getId(), getCompanies.get(0).getId());
+        assertEquals(subCompanies.size(), getCompanies.size());
+        assertEquals(subCompanies.get(0).getId(), getCompanies.get(0).getId());
     }
 }
