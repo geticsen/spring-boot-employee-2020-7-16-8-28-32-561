@@ -1,9 +1,8 @@
 package com.thoughtworks.springbootemployee.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 import java.util.List;
+
 @Entity
 public class Company {
     @Id
@@ -17,16 +16,15 @@ public class Company {
     public Company() {
     }
 
-    public Company(int id, String companyName, Integer employeesNumber) {
+    public Company(Integer id, String companyName, Integer employeesNumber) {
         this.id = id;
         this.companyName = companyName;
         this.employeesNumber = employeesNumber;
     }
 
-    public Company(int id, List<Employee> employees) {
+    public Company(Integer id, List<Employee> employees) {
         this.id = id;
         this.employees = employees;
-        this.employeesNumber += employees.size();
     }
 
     public void addEmployee(Employee employee) {
@@ -38,7 +36,7 @@ public class Company {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
