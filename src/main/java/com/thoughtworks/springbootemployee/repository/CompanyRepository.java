@@ -17,7 +17,7 @@ public class CompanyRepository {
         return null;
     }
 
-    public Object getCompaniesByPageAndPageSize(int page, int pageSize) {
+    public List<Company> getCompaniesByPageAndPageSize(int page, int pageSize) {
         return null;
     }
 }
