@@ -39,6 +39,6 @@ public class CompanyService {
     }
 
     public String deleteCompanyByCompanyID(int companyID) {
-        return null;
+        return companyRepository.deleteCompanyByCompanyID(companyID);
     }
 }

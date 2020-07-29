@@ -29,7 +29,7 @@ public class CompanyRepository {
         return null;
     }
 
-    public Object deleteCompanyByCompanyID(int companyID) {
+    public String deleteCompanyByCompanyID(int companyID) {
         return null;
     }
 }
