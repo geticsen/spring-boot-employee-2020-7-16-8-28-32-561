@@ -29,4 +29,8 @@ public class CompanyService {
     public List<Company> getCompaniesByPageAndPageSize(int page, int pageSize) {
         return companyRepository.getCompaniesByPageAndPageSize(page,pageSize);
     }
+
+    public Company addCompany(Company company) {
+        return null;
+    }
 }

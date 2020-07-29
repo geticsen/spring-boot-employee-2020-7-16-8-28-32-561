@@ -79,4 +79,17 @@ public class CompanyServiceTest {
         assertEquals(subCompanies.size(), getCompanies.size());
         assertEquals(subCompanies.get(0).getId(), getCompanies.get(0).getId());
     }
+
+    @Test
+    void should_return_company_when_add_company_given_company() {
+//        given
+        Company company = new Company(1,"oocl",1000);
+        CompanyRepository companyRepository = mock(CompanyRepository.class);
+        given(companyRepository.addCompany(company)).willReturn(company);
+        CompanyService companyService = new CompanyService(companyRepository);
+//        when
+        Company createdCompany = companyService.addCompany(company);
+//        then
+        assertEquals(company.getId(),createdCompany.getId());
+    }
 }
