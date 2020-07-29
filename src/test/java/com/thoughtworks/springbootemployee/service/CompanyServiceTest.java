@@ -92,4 +92,20 @@ public class CompanyServiceTest {
 //        then
         assertEquals(company.getId(),createdCompany.getId());
     }
+
+    @Test
+    void should_return_updated_company_when_update_company_given_company_id_and_company_info() {
+//        given
+        int companyId = 1;
+        Company company = new Company(companyId,"oocl",1000);
+        Company companyInfo = new Company(companyId,"ali",1);
+        CompanyRepository companyRepository = mock(CompanyRepository.class);
+        given(companyRepository.updateCompany(companyId,companyInfo)).willReturn(companyInfo);
+        CompanyService companyService = new CompanyService(companyRepository);
+//        when
+        Company updatedCompany = companyService.updateCompany(companyId,companyInfo);
+//        then
+        assertEquals(companyInfo.getCompanyName(),updatedCompany.getCompanyName());
+        assertEquals(companyInfo.getEmployeesNumber(),updatedCompany.getEmployeesNumber());
+    }
 }

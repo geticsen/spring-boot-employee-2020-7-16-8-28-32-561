@@ -24,4 +24,8 @@ public class CompanyRepository {
     public Company addCompany(Company company) {
         return null;
     }
+
+    public Object updateCompany(int companyId, Company companyInfo) {
+        return null;
+    }
 }
