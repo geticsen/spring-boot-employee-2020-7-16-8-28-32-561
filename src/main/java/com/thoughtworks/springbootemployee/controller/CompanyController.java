@@ -1,6 +1,5 @@
 package com.thoughtworks.springbootemployee.controller;
 
-import com.thoughtworks.springbootemployee.message.ResponseMessage;
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.CompanyData;
 import com.thoughtworks.springbootemployee.model.Employee;
@@ -42,14 +41,6 @@ public class CompanyController {
         return companyData.getCompanies().stream().filter(company -> {
             return company.getId() == companyId;
         }).findFirst().orElse(null);
-    }
-
-    public void initEmplyeesData(int companyId) {
-        Company result = companyData.getCompanies().stream().filter(company -> {
-            return company.getId() == companyId;
-        }).findFirst().orElse(null);
-        assert result != null;
-        result.setEmployees(employeeData.getEmployees().subList(0, 3));
     }
 
     @PostMapping
