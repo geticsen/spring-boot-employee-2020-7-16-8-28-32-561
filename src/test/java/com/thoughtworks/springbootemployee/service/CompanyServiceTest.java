@@ -23,7 +23,23 @@ public class CompanyServiceTest {
         CompanyService companyService = new CompanyService(companyRepository);
         List<Company> getCompanies = companyService.getAll();
 //        then
-        assertEquals(companies.size(),getCompanies.size());
+        assertEquals(companies.size(), getCompanies.size());
 
+    }
+
+    @Test
+    void should_return_specify_company_when_get_company_given_company_id() {
+        //        given
+        int companyId = 1;
+        Company filterCompany = new CompanyData().getCompanies().stream()
+                .filter(company -> company.getId() == companyId).findFirst().orElse(null);
+//        when
+        CompanyRepository companyRepository = mock(CompanyRepository.class);
+        given(companyRepository.getCompanyByCompanyId(companyId)).willReturn(filterCompany);
+        CompanyService companyService = new CompanyService(companyRepository);
+        Company getCompany = companyService.getCompanyByCompanyId(companyId);
+//        then
+        assert filterCompany != null;
+        assertEquals(filterCompany.getId(), getCompany.getId());
     }
 }

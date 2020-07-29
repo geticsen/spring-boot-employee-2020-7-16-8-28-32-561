@@ -8,4 +8,8 @@ public class CompanyRepository {
     public List<Company> getAll() {
         return null;
     }
+
+    public Object getCompanyByCompanyId(int companyId) {
+        return null;
+    }
 }
