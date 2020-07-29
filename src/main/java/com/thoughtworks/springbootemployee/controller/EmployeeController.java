@@ -37,7 +37,7 @@ public class EmployeeController {
 
     @GetMapping("/{employeeId}")
     @ResponseStatus(HttpStatus.OK)
-    public Employee getEmployeeByEmployeeId(@PathVariable int employeeId) {
+    public Employee getEmployeeByEmployeeId(@PathVariable Integer employeeId) {
         return employeeService.getEmployeeByEmployeeId(employeeId);
     }
 
@@ -53,7 +53,7 @@ public class EmployeeController {
 
     @PutMapping("/{employeeId}")
     @ResponseStatus(HttpStatus.OK)
-    public String modifyEmployeeByEmployeeId(@PathVariable int employeeId, @RequestBody Employee modifyEmployee) {
+    public String modifyEmployeeByEmployeeId(@PathVariable Integer employeeId, @RequestBody Employee modifyEmployee) {
         if (modifyEmployee != null) {
             employeeService.updateEmployee(employeeId,modifyEmployee);
             return ResponseMessage.SUCCESS_MESSAGE;
@@ -63,7 +63,7 @@ public class EmployeeController {
 
     @DeleteMapping("/{employeeId}")
     @ResponseStatus(HttpStatus.OK)
-    public String deleteEmployeeByEmployeeId(@PathVariable int employeeId) {
+    public String deleteEmployeeByEmployeeId(@PathVariable Integer employeeId) {
         return employeeService.deleteEmployeeByemployeeID(employeeId);
     }
 }

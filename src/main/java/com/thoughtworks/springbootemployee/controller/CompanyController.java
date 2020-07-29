@@ -31,13 +31,13 @@ public class CompanyController {
 
     @GetMapping("/{companyId}/employees")
     @ResponseStatus(HttpStatus.OK)
-    public List<Employee> getEmplyeesByCompanyId(@PathVariable int companyId) {
+    public List<Employee> getEmplyeesByCompanyId(@PathVariable Integer companyId) {
         return companyService.getEmployeesByCompanyId(companyId);
     }
 
     @GetMapping("/{companyId}")
     @ResponseStatus(HttpStatus.OK)
-    public Company getCompanyByCompanyId(@PathVariable int companyId) {
+    public Company getCompanyByCompanyId(@PathVariable Integer companyId) {
         return companyData.getCompanies().stream().filter(company -> {
             return company.getId() == companyId;
         }).findFirst().orElse(null);
@@ -55,7 +55,7 @@ public class CompanyController {
 
     @PutMapping("/{companyId}")
     @ResponseStatus(HttpStatus.OK)
-    public Company modifyCompanyByCompanyId(@PathVariable int companyId, @RequestBody(required = false) Company company) {
+    public Company modifyCompanyByCompanyId(@PathVariable Integer companyId, @RequestBody(required = false) Company company) {
         if (company != null) {
             return companyService.updateCompany(companyId, company);
         } else {
@@ -65,7 +65,7 @@ public class CompanyController {
 
     @DeleteMapping("/{companyId}")
     @ResponseStatus(HttpStatus.OK)
-    public String deleteCompanyByCompanyId(@PathVariable int companyId) {
+    public String deleteCompanyByCompanyId(@PathVariable Integer companyId) {
         return companyService.deleteCompanyByCompanyID(companyId);
     }
 

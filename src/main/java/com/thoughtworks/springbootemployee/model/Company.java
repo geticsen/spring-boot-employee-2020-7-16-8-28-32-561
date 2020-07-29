@@ -17,7 +17,7 @@ public class Company {
     public Company() {
     }
 
-    public Company(int id, String companyName, int employeesNumber) {
+    public Company(int id, String companyName, Integer employeesNumber) {
         this.id = id;
         this.companyName = companyName;
         this.employeesNumber = employeesNumber;
@@ -34,7 +34,7 @@ public class Company {
         this.employeesNumber += 1;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
