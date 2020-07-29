@@ -45,8 +45,12 @@ public class EmployeeService {
     }
 
     public Employee updateEmployee(int employeeID, Employee updateEmployee) {
-        updateEmployee.setId(employeeID);
-        return employeeRepository.save(updateEmployee);
+        Employee employee = employeeRepository.findById(employeeID).orElse(null);
+        employee.setAge(updateEmployee.getAge());
+        employee.setGender(updateEmployee.getGender());
+        employee.setName(updateEmployee.getName());
+        employee.setSalary(updateEmployee.getSalary());
+        return employeeRepository.save(employee);
     }
 
     public String deleteEmployeeByemployeeID(Integer employeeID) {
