@@ -54,14 +54,12 @@ public class CompanyController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public String addCompany(@RequestBody Company company) {
+    public Company addCompany(@RequestBody Company company) {
         if (company != null) {
-            companyData.getCompanies().add(company);
+            return companyService.addCompany(company);
+        }else {
+            return null;
         }
-        if (companyData.getCompanies().contains(company)) {
-            return ResponseMessage.SUCCESS_MESSAGE;
-        }
-        return ResponseMessage.FAIL_MESSAGE;
     }
 
     @PutMapping("/{companyId}")
