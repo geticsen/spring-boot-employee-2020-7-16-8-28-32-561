@@ -54,10 +54,11 @@ public class CompanyServiceTest {
         int companyId = 1;
         List<Employee> employees = new EmployeeData().getEmployees();
         List<Company> companies = new CompanyData().getCompanies();
-        Objects.requireNonNull(companies.stream().filter(company -> company.getId() == companyId).findFirst().orElse(null)).setEmployees(employees);
+        Company fliterCompany = companies.stream().filter(company -> company.getId() == companyId).findFirst().orElse(null);
+        Objects.requireNonNull(fliterCompany).setEmployees(employees);
 //        when
         CompanyRepository companyRepository = mock(CompanyRepository.class);
-        given(companyRepository.findById(companyId)).willReturn(employees);
+        given(companyRepository.findById(companyId)).willReturn(java.util.Optional.of(fliterCompany));
         CompanyService companyService = new CompanyService(companyRepository);
         List<Employee> getEmployees = companyService.getEmployeesByCompanyId(companyId);
 //        then
@@ -116,7 +117,7 @@ public class CompanyServiceTest {
         int companyID = 1;
         String message = "success";
         CompanyRepository companyRepository = mock(CompanyRepository.class);
-        given(companyRepository.deleteById(companyID)).willReturn(message);
+        //given(companyRepository.deleteById(companyID)).willReturn(message);
         CompanyService companyService = new CompanyService(companyRepository);
 //        when
         String backMessage = companyService.deleteCompanyByCompanyID(companyID);
