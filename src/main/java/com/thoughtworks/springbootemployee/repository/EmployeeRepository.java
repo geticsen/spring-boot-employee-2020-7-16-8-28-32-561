@@ -25,4 +25,8 @@ public class EmployeeRepository {
         int end = page*pageSize;
         return  employeeList.subList(start,end);
     }
+
+    public Object getEmployeeByGender(String gender) {
+        return null;
+    }
 }

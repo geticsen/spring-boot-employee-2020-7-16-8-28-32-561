@@ -1,11 +1,16 @@
 package com.thoughtworks.springbootemployee.service;
 
 import com.thoughtworks.springbootemployee.model.Employee;
+import com.thoughtworks.springbootemployee.model.EmployeeData;
 import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Random;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.BDDMockito.given;
@@ -56,5 +61,25 @@ public class EmployeeServiceTest {
 //        then
         assertEquals(employeeList.size(), employees.size());
         assertEquals(employeeList.get(0).getId(), employees.get(0).getId());
+    }
+
+    @Test
+    void should_return_specify_gender_employees_when_get_employees_given_gender() {
+//        given
+        String gender = "male";
+        List<Employee> employees = new EmployeeData().getEmployees();
+        EmployeeRepository employeeRepository = mock(EmployeeRepository.class);
+        List<Employee> filterEmployees =  employees.stream().filter(employee ->
+                employee.getGender().equals(gender))
+                .collect(Collectors.toList());
+        given(employeeRepository.getEmployeeByGender(gender)).willReturn(filterEmployees);
+        EmployeeService employeeService = new EmployeeService(employeeRepository);
+//        when
+        List<Employee> maleEmployees = employeeService.getEmployeeByGender(gender);
+//        then
+        assertEquals(filterEmployees.size(),maleEmployees.size());
+        Random random = new Random();
+        int randInt = random.nextInt(filterEmployees.size());
+        assertEquals(gender,maleEmployees.get(randInt).getGender());
     }
 }
