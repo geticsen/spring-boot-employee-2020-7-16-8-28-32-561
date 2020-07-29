@@ -5,14 +5,17 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import java.util.List;
 @Entity
+@Table(name = "company")
 public class Company {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @Column(name = "company_name")
+    private String companyName;
+
+    private Integer employeesNumber;
     @OneToMany
     private List<Employee> employees;
-    private String companyName;
-    private Integer employeesNumber;
 
     public Company() {
     }
