@@ -49,7 +49,8 @@ public class EmployeeRepository {
         return employee;
     }
 
-    public Object updateEmployee(int employeeID, Employee updateEmployee) {
-        return null;
+    public Employee updateEmployee(int employeeID, Employee updateEmployee) {
+        return updateEmployee;
     }
+
 }
