@@ -1,8 +1,11 @@
 package com.thoughtworks.springbootemployee.model;
 
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
+
 import java.util.ArrayList;
 import java.util.List;
-
+@Component
 public class EmployeeData {
     public static final String MALE = "male";
     public static final String FEMALE = "female";
