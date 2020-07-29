@@ -16,4 +16,8 @@ public class EmployeeRepository {
     public Employee getEmployeeByEmployeeId(int id) {
         return new Employee(1,"kiki",18,"female",99999);
     }
+
+    public Object getEmployeeByPageAndPageSize(int page, int pageSize) {
+        return null;
+    }
 }

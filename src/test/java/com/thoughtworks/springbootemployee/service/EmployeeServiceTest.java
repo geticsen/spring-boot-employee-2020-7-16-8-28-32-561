@@ -23,20 +23,38 @@ public class EmployeeServiceTest {
 //        when
         List<Employee> employees = employeeService.getAllEmployees();
 //        then
-        assertEquals(1,employees.size());
+        assertEquals(1, employees.size());
     }
 
     @Test
     void should_return_right_employee_when_get_employee_given_employee_id() {
 //        given
-        Employee employee =new Employee(1,"kiki",18,"female",99999);
+        Employee employee = new Employee(1, "kiki", 18, "female", 99999);
         EmployeeRepository employeeRepository = mock(EmployeeRepository.class);
         given(employeeRepository.getEmployeeByEmployeeId(employee.getId())).willReturn(employee);
         EmployeeService employeeService = new EmployeeService(employeeRepository);
 //        when
         Employee getEmployee = employeeService.getEmployeeByEmployeeId(employee.getId());
 //        then
-        assertEquals(employee.getId(),getEmployee.getId());
-        assertEquals(employee.getAge(),getEmployee.getAge());
+        assertEquals(employee.getId(), getEmployee.getId());
+        assertEquals(employee.getAge(), getEmployee.getAge());
+    }
+
+    @Test
+    void should_return_employees_when_get_employees_given_page_and_page_size() {
+//        given
+        int page = 1;
+        int pageSize = 2;
+        List<Employee> employeeList = new ArrayList<>();
+        employeeList.add(new Employee(0, "kiki", 18, "female", 99999));
+        employeeList.add(new Employee(1, "kiki", 18, "female", 99999));
+        EmployeeRepository employeeRepository = mock(EmployeeRepository.class);
+        given(employeeRepository.getEmployeeByPageAndPageSize(page, pageSize)).willReturn(employeeList);
+        EmployeeService employeeService = new EmployeeService(employeeRepository);
+//        when
+        List<Employee> employees = employeeService.getEmployeeByPageAndPageSize(page, pageSize);
+//        then
+        assertEquals(employeeList.size(), employees.size());
+        assertEquals(employeeList.get(0).getId(), employees.get(0).getId());
     }
 }
