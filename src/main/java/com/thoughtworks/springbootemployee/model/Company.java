@@ -1,4 +1,5 @@
 package com.thoughtworks.springbootemployee.model;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.List;
@@ -21,6 +22,12 @@ public class Company {
     public Company(int id, List<Employee> employees) {
         this.id = id;
         this.employees = employees;
+        this.employeesNumber += employees.size();
+    }
+
+    public void addEmployee(Employee employee) {
+        this.employees.add(employee);
+        this.employeesNumber += 1;
     }
 
     public int getId() {
