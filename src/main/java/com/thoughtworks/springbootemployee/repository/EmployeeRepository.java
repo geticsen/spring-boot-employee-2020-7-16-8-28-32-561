@@ -48,4 +48,8 @@ public class EmployeeRepository {
     public Employee addEmployee(Employee employee) {
         return employee;
     }
+
+    public Object updateEmployee(int employeeID, Employee updateEmployee) {
+        return null;
+    }
 }
