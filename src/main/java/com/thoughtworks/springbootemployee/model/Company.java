@@ -1,9 +1,11 @@
 package com.thoughtworks.springbootemployee.model;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.List;
 
 public class Company {
     private int id;
-    private List<Employee> Employees;
+    private List<Employee> employees;
     private String companyName;
     private int employeesNumber;
 
@@ -16,9 +18,9 @@ public class Company {
         this.employeesNumber = employeesNumber;
     }
 
-    public Company(int id, List<Employee> Employees) {
+    public Company(int id, List<Employee> employees) {
         this.id = id;
-        this.Employees = Employees;
+        this.employees = employees;
     }
 
     public int getId() {
@@ -30,11 +32,11 @@ public class Company {
     }
 
     public List<Employee> getEmployees() {
-        return Employees;
+        return employees;
     }
 
     public void setEmployees(List<Employee> Employees) {
-        this.Employees = Employees;
+        this.employees = Employees;
     }
 
     public String getCompanyName() {
