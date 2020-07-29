@@ -1,7 +1,6 @@
 package com.thoughtworks.springbootemployee.controller;
 
-import com.thoughtworks.springbootemployee.Message.ResponseMessage;
-import com.thoughtworks.springbootemployee.model.Company;
+import com.thoughtworks.springbootemployee.message.ResponseMessage;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.model.EmployeeData;
 import org.springframework.web.bind.annotation.*;
