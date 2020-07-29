@@ -17,7 +17,12 @@ public class EmployeeRepository {
         return new Employee(1,"kiki",18,"female",99999);
     }
 
-    public Object getEmployeeByPageAndPageSize(int page, int pageSize) {
-        return null;
+    public List<Employee> getEmployeeByPageAndPageSize(int page, int pageSize) {
+        List<Employee> employeeList = new ArrayList<>();
+        employeeList.add(new Employee(0, "kiki", 18, "female", 99999));
+        employeeList.add(new Employee(1, "kiki", 18, "female", 99999));
+        int start = (page-1)*pageSize;
+        int end = page*pageSize;
+        return  employeeList.subList(start,end);
     }
 }
