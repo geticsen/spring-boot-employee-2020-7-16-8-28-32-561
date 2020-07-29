@@ -23,6 +23,6 @@ public class CompanyService {
     }
 
     public List<Employee> getEmployeesByCompanyId(int companyId) {
-        return null;
+        return companyRepository.getEmployeesByCompanyId(companyId);
     }
 }

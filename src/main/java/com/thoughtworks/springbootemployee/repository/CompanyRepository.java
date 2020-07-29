@@ -1,6 +1,7 @@
 package com.thoughtworks.springbootemployee.repository;
 
 import com.thoughtworks.springbootemployee.model.Company;
+import com.thoughtworks.springbootemployee.model.Employee;
 
 import java.util.List;
 
@@ -12,7 +13,7 @@ public class CompanyRepository {
     public Company getCompanyByCompanyId(int companyId) {
         return null;
     }
-    public Object getEmployeesByCompanyId(int companyId){
+    public List<Employee> getEmployeesByCompanyId(int companyId){
         return null;
     }
 }
