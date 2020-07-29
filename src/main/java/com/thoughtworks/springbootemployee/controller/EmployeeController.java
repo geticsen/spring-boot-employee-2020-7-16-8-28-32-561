@@ -42,22 +42,20 @@ public class EmployeeController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public String addEmployee(@RequestBody Employee employee) {
         if (employee != null) {
-            employeeData.getEmployees().add(employee);
+            employeeService.addEmployee(employee);
             return ResponseMessage.SUCCESS_MESSAGE;
         }
         return ResponseMessage.FAIL_MESSAGE;
     }
 
     @PutMapping("/{employeeId}")
+    @ResponseStatus(HttpStatus.OK)
     public String modifyEmployeeByEmployeeId(@PathVariable int employeeId, @RequestBody Employee modifyEmployee) {
-        Employee employee = employeeData.getEmployees().stream().filter(findEmployee -> {
-            return findEmployee.getId() == employeeId;
-        }).findFirst().orElse(null);
-
-        if (employee != null && modifyEmployee != null) {
-            employeeData.getEmployees().set(employeeData.getEmployees().indexOf(employee), modifyEmployee);
+        if (modifyEmployee != null) {
+            employeeService.updateEmployee(employeeId,modifyEmployee);
             return ResponseMessage.SUCCESS_MESSAGE;
         }
         return ResponseMessage.FAIL_MESSAGE;
