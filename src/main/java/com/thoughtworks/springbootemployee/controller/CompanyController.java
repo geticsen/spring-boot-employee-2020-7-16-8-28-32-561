@@ -82,6 +82,9 @@ public class CompanyController {
         }).findFirst().orElse(null);
 
         if(deleteCompany!=null){
+            deleteCompany.getEmployees().forEach(employee -> {
+                employeeData.getEmployees().remove(employee);
+            });
             companyData.getCompanies().remove(deleteCompany);
             return ResponseMessage.SUCCESS_MESSAGE;
         }
