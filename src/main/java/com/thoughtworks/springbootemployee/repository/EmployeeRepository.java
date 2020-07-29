@@ -45,7 +45,7 @@ public class EmployeeRepository {
 
     }
 
-    public Object addEmployee(Employee employee) {
-        return null;
+    public Employee addEmployee(Employee employee) {
+        return employee;
     }
 }
