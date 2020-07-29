@@ -5,6 +5,8 @@ import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.CompanyData;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.model.EmployeeData;
+import com.thoughtworks.springbootemployee.service.CompanyService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,19 +15,19 @@ import java.util.List;
 @RestController
 @RequestMapping("/companies")
 public class CompanyController {
-    private static final CompanyData companyData = new CompanyData();
-    private static final EmployeeData employeeData = new EmployeeData();
+    @Autowired
+    private CompanyService companyService;
+    private final CompanyData companyData = new CompanyData();
+    private EmployeeData employeeData = new EmployeeData();
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<Company> getAllCompany(@RequestParam(name = "page", required = false) Integer page,
                                        @RequestParam(name = "pageSize", required = false) Integer pageSize) {
         if (page != null && pageSize != null) {
-            int start = --page * pageSize;
-            int end = ++page * pageSize;
-            return companyData.getCompanies().subList(start, end);
+            return  companyService.getCompaniesByPageAndPageSize(page,pageSize).getContent();
         }
-        return companyData.getCompanies();
+        return companyService.getAll();
     }
 
     @GetMapping("/{companyId}/employees")
