@@ -42,4 +42,7 @@ public class EmployeeService {
         return employeeRepository.updateEmployee(employeeID,updateEmployee);
     }
 
+    public String deleteEmployeeByemployeeID(int employeeID) {
+        return null;
+    }
 }

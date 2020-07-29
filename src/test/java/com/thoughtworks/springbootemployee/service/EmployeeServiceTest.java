@@ -69,7 +69,7 @@ public class EmployeeServiceTest {
         String gender = "male";
         List<Employee> employees = new EmployeeData().getEmployees();
         EmployeeRepository employeeRepository = mock(EmployeeRepository.class);
-        List<Employee> filterEmployees =  employees.stream().filter(employee ->
+        List<Employee> filterEmployees = employees.stream().filter(employee ->
                 employee.getGender().equals(gender))
                 .collect(Collectors.toList());
         given(employeeRepository.getEmployeeByGender(gender)).willReturn(filterEmployees);
@@ -77,10 +77,10 @@ public class EmployeeServiceTest {
 //        when
         List<Employee> maleEmployees = employeeService.getEmployeeByGender(gender);
 //        then
-        assertEquals(filterEmployees.size(),maleEmployees.size());
+        assertEquals(filterEmployees.size(), maleEmployees.size());
         Random random = new Random();
         int randInt = random.nextInt(filterEmployees.size());
-        assertEquals(gender,maleEmployees.get(randInt).getGender());
+        assertEquals(gender, maleEmployees.get(randInt).getGender());
     }
 
     @Test
@@ -93,20 +93,34 @@ public class EmployeeServiceTest {
 //        when
         Employee createdEmployee = employeeService.addEmployee(employee);
 //        then
-        assertEquals(employee,createdEmployee);
+        assertEquals(employee, createdEmployee);
     }
 
     @Test
     void should_return_modify_employee_when_update_employee_given_update_employee() {
 //        given
         int employeeID = 1;
-        Employee updateEmployee = new Employee(employeeID,"kiki",18,"male",1000);
+        Employee updateEmployee = new Employee(employeeID, "kiki", 18, "male", 1000);
         EmployeeRepository employeeRepository = mock(EmployeeRepository.class);
-        given(employeeRepository.updateEmployee(employeeID,updateEmployee)).willReturn(updateEmployee);
+        given(employeeRepository.updateEmployee(employeeID, updateEmployee)).willReturn(updateEmployee);
         EmployeeService employeeService = new EmployeeService(employeeRepository);
 //        when
-        Employee backEmployee = employeeService.updateEmployee(employeeID,updateEmployee);
+        Employee backEmployee = employeeService.updateEmployee(employeeID, updateEmployee);
 //        then
-        assertEquals(updateEmployee.getGender(),backEmployee.getGender());
+        assertEquals(updateEmployee.getGender(), backEmployee.getGender());
+    }
+
+    @Test
+    void should_return_success_message_when_delete_employee_given_employeeID() {
+//        given
+        int employeeID = 1;
+        String message = "success";
+        EmployeeRepository employeeRepository = mock(EmployeeRepository.class);
+        given(employeeRepository.deleteEmployeeByemployeeID(employeeID)).willReturn(message);
+        EmployeeService employeeService = new EmployeeService(employeeRepository);
+//        when
+        String backMessage = employeeService.deleteEmployeeByemployeeID(employeeID);
+//        then
+        assertEquals(message,backMessage);
     }
 }
