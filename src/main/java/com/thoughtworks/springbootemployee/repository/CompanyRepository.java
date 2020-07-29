@@ -25,7 +25,7 @@ public class CompanyRepository {
         return null;
     }
 
-    public Object updateCompany(int companyId, Company companyInfo) {
+    public Company updateCompany(int companyId, Company companyInfo) {
         return null;
     }
 }
