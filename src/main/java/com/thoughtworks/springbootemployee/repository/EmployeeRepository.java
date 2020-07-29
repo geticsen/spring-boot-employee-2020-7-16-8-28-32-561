@@ -13,7 +13,7 @@ public class EmployeeRepository {
         return employees;
     }
 
-    public Object getEmployeeByEmployeeId(int id) {
-        return null;
+    public Employee getEmployeeByEmployeeId(int id) {
+        return new Employee(1,"kiki",18,"female",99999);
     }
 }
