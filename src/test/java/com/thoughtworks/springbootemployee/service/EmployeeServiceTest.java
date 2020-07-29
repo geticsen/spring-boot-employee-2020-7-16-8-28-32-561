@@ -25,4 +25,18 @@ public class EmployeeServiceTest {
 //        then
         assertEquals(1,employees.size());
     }
+
+    @Test
+    void should_return_right_employee_when_get_employee_given_employee_id() {
+//        given
+        Employee employee =new Employee(1,"kiki",18,"female",99999);
+        EmployeeRepository employeeRepository = mock(EmployeeRepository.class);
+        given(employeeRepository.getEmployeeByEmployeeId(employee.getId())).willReturn(employee);
+        EmployeeService employeeService = new EmployeeService(employeeRepository);
+//        when
+        Employee getEmployee = employeeService.getEmployeeByEmployeeId(employee.getId());
+//        then
+        assertEquals(employee.getId(),getEmployee.getId());
+        assertEquals(employee.getAge(),getEmployee.getAge());
+    }
 }
