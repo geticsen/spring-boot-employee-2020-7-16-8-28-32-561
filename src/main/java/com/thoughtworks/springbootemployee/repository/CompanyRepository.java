@@ -9,7 +9,7 @@ public class CompanyRepository {
         return null;
     }
 
-    public Object getCompanyByCompanyId(int companyId) {
+    public Company getCompanyByCompanyId(int companyId) {
         return null;
     }
 }
