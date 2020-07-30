@@ -1,5 +1,6 @@
 package com.thoughtworks.springbootemployee.service;
 
+import com.thoughtworks.springbootemployee.exception.NoSuchDataException;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.model.EmployeeData;
 import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
@@ -12,8 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertIterableEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -96,7 +96,7 @@ public class EmployeeServiceTest {
     }
 
     @Test
-    void should_return_modify_employee_when_update_employee_given_update_employee() {
+    void should_return_modify_employee_when_update_employee_given_update_employee() throws NoSuchDataException {
 //        given
         int employeeID = 1;
         Employee employee = new Employee(employeeID, "kiki", 18, "male", 1000);
@@ -128,5 +128,19 @@ public class EmployeeServiceTest {
         String backMessage = employeeService.deleteEmployeeByemployeeID(employeeID);
 //        then
         assertEquals(message, backMessage);
+    }
+
+    @Test
+    void should_throw_no_such_data_exception_when_update_employee_given_none() {
+//        given
+        int employeeID = 1;
+        EmployeeRepository employeeRepository = mock(EmployeeRepository.class);
+
+        EmployeeService employeeService = new EmployeeService(employeeRepository);
+//        when
+        Exception exception = assertThrows(NoSuchDataException.class, () -> employeeService.updateEmployee(111, new Employee()));
+
+//        then
+        assertEquals(NoSuchDataException.class, exception.getClass());
     }
 }

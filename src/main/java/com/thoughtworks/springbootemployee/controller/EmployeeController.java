@@ -1,5 +1,6 @@
 package com.thoughtworks.springbootemployee.controller;
 
+import com.thoughtworks.springbootemployee.exception.NoSuchDataException;
 import com.thoughtworks.springbootemployee.message.ResponseMessage;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.model.EmployeeData;
@@ -10,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/employees")
@@ -53,9 +53,9 @@ public class EmployeeController {
 
     @PutMapping("/{employeeId}")
     @ResponseStatus(HttpStatus.OK)
-    public String modifyEmployeeByEmployeeId(@PathVariable Integer employeeId, @RequestBody Employee modifyEmployee) {
+    public String modifyEmployeeByEmployeeId(@PathVariable Integer employeeId, @RequestBody Employee modifyEmployee) throws NoSuchDataException {
         if (modifyEmployee != null) {
-            employeeService.updateEmployee(employeeId,modifyEmployee);
+            employeeService.updateEmployee(employeeId, modifyEmployee);
             return ResponseMessage.SUCCESS_MESSAGE;
         }
         return ResponseMessage.FAIL_MESSAGE;
