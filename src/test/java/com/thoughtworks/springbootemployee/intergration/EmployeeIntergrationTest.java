@@ -5,6 +5,7 @@ import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.CompanyRepository;
 import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -29,6 +30,11 @@ public class EmployeeIntergrationTest {
     private EmployeeRepository employeeRepository;
     @Autowired
     private CompanyRepository companyRepository;
+
+    @BeforeEach
+    void dataInit() {
+
+    }
 
     @AfterEach
     void init() {
@@ -112,5 +118,19 @@ public class EmployeeIntergrationTest {
                 .andExpect(jsonPath("$.companyId").value(savedCompany.getId()));
 
 
+    }
+
+    @Test
+    void should_return_message_when_delete_employee_given_employee_id() throws Exception {
+//        given
+        String message = "success";
+        Company company = new Company(1, "oocl", 2888);
+        Company savedCompany = companyRepository.save(company);
+        Employee employee = new Employee(1, "green", 20, "male", 1000, company.getId());
+        Employee savedEmployee = employeeRepository.save(employee);
+//        when
+        mockMvc.perform(delete("/employees/" + savedEmployee.getId()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").value("success"));
     }
 }
