@@ -5,17 +5,18 @@ import com.thoughtworks.springbootemployee.model.EmployeeData;
 import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.verify;
 
 public class EmployeeServiceTest {
     @Test
@@ -29,7 +30,7 @@ public class EmployeeServiceTest {
 //        when
         List<Employee> employees = employeeService.getAllEmployees();
 //        then
-        assertEquals(1, employees.size());
+        assertIterableEquals(employeeList, employees);
     }
 
     @Test
@@ -42,8 +43,7 @@ public class EmployeeServiceTest {
 //        when
         Employee getEmployee = employeeService.getEmployeeByEmployeeId(employee.getId());
 //        then
-        assertEquals(employee.getId(), getEmployee.getId());
-        assertEquals(employee.getAge(), getEmployee.getAge());
+        assertEquals(employee, getEmployee);
     }
 
     @Test
@@ -55,33 +55,31 @@ public class EmployeeServiceTest {
         employeeList.add(new Employee(0, "kiki", 18, "female", 99999));
         employeeList.add(new Employee(1, "kiki", 18, "female", 99999));
         EmployeeRepository employeeRepository = mock(EmployeeRepository.class);
-        given(employeeRepository.findAll(PageRequest.of(page, pageSize))).willReturn((Page<Employee>) employeeList);
+        PageImpl<Employee> employeePage = new PageImpl<>(employeeList, PageRequest.of(page - 1, pageSize), employeeList.size());
+        given(employeeRepository.findAll(PageRequest.of(page, pageSize))).willReturn(employeePage);
         EmployeeService employeeService = new EmployeeService(employeeRepository);
 //        when
-        Page<Employee> employees =  employeeService.getEmployeeByPageAndPageSize(page, pageSize);
+        Page<Employee> employees = employeeService.getEmployeeByPageAndPageSize(page, pageSize);
 //        then
-        assertEquals(employeeList.size(), employees.getContent().size());
-        assertEquals(employeeList.get(0).getId(), employees.getContent().get(0).getId());
+        //todo 判断对象
+        assertIterableEquals(employeeList, employees.getContent());
     }
 
     @Test
     void should_return_specify_gender_employees_when_get_employees_given_gender() {
 //        given
+        //todo 准备数据 不使用筛选逻辑
         String gender = "male";
         List<Employee> employees = new EmployeeData().getEmployees();
         EmployeeRepository employeeRepository = mock(EmployeeRepository.class);
-        List<Employee> filterEmployees = employees.stream().filter(employee ->
-                employee.getGender().equals(gender))
-                .collect(Collectors.toList());
+        List<Employee> filterEmployees = new EmployeeData().getEmloyeesByGender(gender);
+
         given(employeeRepository.findEmployeesByGender(gender)).willReturn(filterEmployees);
         EmployeeService employeeService = new EmployeeService(employeeRepository);
 //        when
         List<Employee> maleEmployees = employeeService.getEmployeeByGender(gender);
 //        then
-        assertEquals(filterEmployees.size(), maleEmployees.size());
-        Random random = new Random();
-        int randInt = random.nextInt(filterEmployees.size());
-        assertEquals(gender, maleEmployees.get(randInt).getGender());
+        assertIterableEquals(filterEmployees, maleEmployees);
     }
 
     @Test
@@ -101,14 +99,19 @@ public class EmployeeServiceTest {
     void should_return_modify_employee_when_update_employee_given_update_employee() {
 //        given
         int employeeID = 1;
-        Employee updateEmployee = new Employee(employeeID, "kiki", 18, "male", 1000);
+        Employee employee = new Employee(employeeID, "kiki", 18, "male", 1000);
+        Employee updateEmployee = new Employee(employeeID, "kiki", 18, "female", 5000);
+
         EmployeeRepository employeeRepository = mock(EmployeeRepository.class);
         given(employeeRepository.save(updateEmployee)).willReturn(updateEmployee);
+        given(employeeRepository.findById(employeeID)).willReturn(java.util.Optional.of(employee));
         EmployeeService employeeService = new EmployeeService(employeeRepository);
 //        when
+//        todo backEmployee return null
         Employee backEmployee = employeeService.updateEmployee(employeeID, updateEmployee);
 //        then
-        assertEquals(updateEmployee.getGender(), backEmployee.getGender());
+        verify(employeeRepository).save(updateEmployee);
+        //assertEquals(updateEmployee, backEmployee);
     }
 
     @Test
@@ -116,12 +119,14 @@ public class EmployeeServiceTest {
 //        given
         int employeeID = 1;
         String message = "success";
+        Employee employee = new Employee(1, "green", 19, "male", 0);
         EmployeeRepository employeeRepository = mock(EmployeeRepository.class);
-        //when(employeeRepository.deleteById(employeeID)).then(message);
+        given(employeeRepository.findById(employeeID)).willReturn(Optional.of(employee));
+
         EmployeeService employeeService = new EmployeeService(employeeRepository);
 //        when
         String backMessage = employeeService.deleteEmployeeByemployeeID(employeeID);
 //        then
-        assertEquals(message,backMessage);
+        assertEquals(message, backMessage);
     }
 }

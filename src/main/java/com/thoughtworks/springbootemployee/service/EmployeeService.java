@@ -2,7 +2,6 @@ package com.thoughtworks.springbootemployee.service;
 
 import com.thoughtworks.springbootemployee.message.ResponseMessage;
 import com.thoughtworks.springbootemployee.model.Employee;
-import com.thoughtworks.springbootemployee.model.EmployeeData;
 import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -10,7 +9,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class EmployeeService {
@@ -46,20 +44,25 @@ public class EmployeeService {
 
     public Employee updateEmployee(int employeeID, Employee updateEmployee) {
         Employee employee = employeeRepository.findById(employeeID).orElse(null);
-        employee.setAge(updateEmployee.getAge());
-        employee.setGender(updateEmployee.getGender());
-        employee.setName(updateEmployee.getName());
-        employee.setSalary(updateEmployee.getSalary());
-        return employeeRepository.save(employee);
+        if (employee != null) {
+            updateEmployee.setId(employeeID);
+            updateEmployee.setAge(updateEmployee.getAge());
+            updateEmployee.setGender(updateEmployee.getGender());
+            updateEmployee.setName(updateEmployee.getName());
+            updateEmployee.setSalary(updateEmployee.getSalary());
+            return employeeRepository.save(updateEmployee);
+        } else {
+            return new Employee();
+        }
+
     }
 
     public String deleteEmployeeByemployeeID(Integer employeeID) {
-        employeeRepository.deleteById(employeeID);
-        Optional<Employee> employee = employeeRepository.findById(employeeID);
-        if (employee.isPresent()){
-            return ResponseMessage.FAIL_MESSAGE;
-        }else{
+        try {
+            employeeRepository.deleteById(employeeID);
             return ResponseMessage.SUCCESS_MESSAGE;
+        } catch (Exception e) {
+            return ResponseMessage.FAIL_MESSAGE;
         }
     }
 }
