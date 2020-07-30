@@ -16,8 +16,7 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -84,5 +83,34 @@ public class EmployeeIntergrationTest {
         List<Employee> employees = employeeRepository.findAll();
         assertEquals(1, employees.size());
         assertEquals("kiki", employees.get(0).getName());
+    }
+
+    @Test
+    void should_return_modified_employee_when_put_employee_given_employee() throws Exception {
+//        given
+        Company company = new Company(1, "oocl", 2888);
+        Company savedCompany = companyRepository.save(company);
+        Employee employee = new Employee(1, "green", 20, "male", 1000, company.getId());
+        employeeRepository.save(employee);
+        String employeeInfo = " {\n" +
+                "            \"id\": 1,\n" +
+                "            \"name\": \"kiki\",\n" +
+                "            \"age\": 18,\n" +
+                "            \"gender\": \"male\",\n" +
+                "            \"salary\": 100,\n" +
+                "            \"companyId\": " + savedCompany.getId() + "\n" +
+                "}";
+//        when
+        mockMvc.perform(put("/employees/1")
+                .contentType(MediaType.APPLICATION_JSON).content(employeeInfo))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").isNumber())
+                .andExpect(jsonPath("$.name").value("kiki"))
+                .andExpect(jsonPath("$.age").value(18))
+                .andExpect(jsonPath("$.gender").value("male"))
+                .andExpect(jsonPath("$.salary").value(100))
+                .andExpect(jsonPath("$.companyId").value(savedCompany.getId()));
+
+
     }
 }
