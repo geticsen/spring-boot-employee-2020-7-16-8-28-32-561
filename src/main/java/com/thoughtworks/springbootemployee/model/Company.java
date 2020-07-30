@@ -1,7 +1,5 @@
 package com.thoughtworks.springbootemployee.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 import java.util.List;
 @Entity
@@ -14,7 +12,7 @@ public class Company {
     private String companyName;
 
     private Integer employeesNumber;
-    @OneToMany
+    @OneToMany(targetEntity = Employee.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "companyId")
     private List<Employee> employees;
 
     public Company() {
