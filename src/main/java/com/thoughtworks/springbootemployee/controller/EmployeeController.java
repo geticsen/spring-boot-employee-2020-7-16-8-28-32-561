@@ -43,12 +43,11 @@ public class EmployeeController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public String addEmployee(@RequestBody Employee employee) {
+    public Employee addEmployee(@RequestBody Employee employee) {
         if (employee != null) {
-            employeeService.addEmployee(employee);
-            return ResponseMessage.SUCCESS_MESSAGE;
+            return employeeService.addEmployee(employee);
         }
-        return ResponseMessage.FAIL_MESSAGE;
+        return null;
     }
 
     @PutMapping("/{employeeId}")
