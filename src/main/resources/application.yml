@@ -2,10 +2,12 @@ spring:
   datasource:
     url: jdbc:h2:mem:testdb
     driverClassName: org.h2.Driver
-    username: kiki
-    password: kiki
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: none
   h2:
     console:
       enabled: true
+  flyway:
+    location: classpath:db/migration
