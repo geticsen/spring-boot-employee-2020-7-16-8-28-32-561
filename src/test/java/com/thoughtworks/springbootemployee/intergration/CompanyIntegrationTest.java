@@ -39,7 +39,7 @@ public class CompanyIntegrationTest {
         Company company = new Company(1, "oocl", 2888);
         Company savedCompany = companyRepository.save(company);
 
-//        when
+//        when then
         mockMvc.perform(get("/companies"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
@@ -47,5 +47,20 @@ public class CompanyIntegrationTest {
                 .andExpect(jsonPath("$[0].companyName").value("oocl"))
                 .andExpect(jsonPath("$[0].employeesNumber").value(2888))
                 .andExpect(jsonPath("$[0].employees").value(new ArrayList<Employee>()));
+    }
+
+    @Test
+    void should_return_company_when_get_companies_given_company_id() throws Exception {
+//        given
+        Company company = new Company(1, "oocl", 2888);
+        Company savedCompany = companyRepository.save(company);
+
+//        when then
+        mockMvc.perform(get("/companies/" + savedCompany.getId()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").isNumber())
+                .andExpect(jsonPath("$.companyName").value("oocl"))
+                .andExpect(jsonPath("$.employeesNumber").value(2888))
+                .andExpect(jsonPath("$.employees").value(new ArrayList<Employee>()));
     }
 }

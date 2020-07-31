@@ -40,9 +40,7 @@ public class CompanyController {
     @GetMapping("/{companyId}")
     @ResponseStatus(HttpStatus.OK)
     public Company getCompanyByCompanyId(@PathVariable Integer companyId) {
-        return companyData.getCompanies().stream().filter(company -> {
-            return company.getId() == companyId;
-        }).findFirst().orElse(null);
+        return companyService.getCompanyByCompanyId(companyId);
     }
 
     @PostMapping
