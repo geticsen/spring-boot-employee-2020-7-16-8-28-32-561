@@ -45,10 +45,7 @@ public class EmployeeIntergrationTest {
     @Test
     void should_get_employee_when_hit_get_employee_end_point_given_nothing() throws Exception {
 //        given
-        Company company = new Company(1, "oocl", 2888);
-        Company savedCompany = companyRepository.save(company);
         Employee employee = new Employee(8, "kiki", 80, "female", 1000);
-        employee.setCompanyId(company.getId());
         employeeRepository.save(employee);
 //        when
         mockMvc.perform(get("/employees"))
@@ -96,10 +93,10 @@ public class EmployeeIntergrationTest {
 //        given
         Company company = new Company(1, "oocl", 2888);
         Company savedCompany = companyRepository.save(company);
-        Employee employee = new Employee(1, "green", 20, "male", 1000, company.getId());
-        employeeRepository.save(employee);
+        Employee employee = new Employee(1, "green", 20, "male", 1000, savedCompany.getId());
+        Employee savedEmployee = employeeRepository.save(employee);
         String employeeInfo = " {\n" +
-                "            \"id\": 1,\n" +
+                "            \"id\": " + savedEmployee.getId() + ",\n" +
                 "            \"name\": \"kiki\",\n" +
                 "            \"age\": 18,\n" +
                 "            \"gender\": \"male\",\n" +
@@ -107,7 +104,7 @@ public class EmployeeIntergrationTest {
                 "            \"companyId\": " + savedCompany.getId() + "\n" +
                 "}";
 //        when
-        mockMvc.perform(put("/employees/1")
+        mockMvc.perform(put("/employees/" + savedEmployee.getId())
                 .contentType(MediaType.APPLICATION_JSON).content(employeeInfo))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").isNumber())
