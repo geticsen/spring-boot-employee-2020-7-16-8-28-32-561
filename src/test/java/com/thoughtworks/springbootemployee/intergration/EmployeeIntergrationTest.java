@@ -130,4 +130,25 @@ public class EmployeeIntergrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").value("success"));
     }
+
+    @Test
+    void should_return_employees_when_get_employees_given_page_and_page_size() throws Exception {
+//        given
+        int page = 1;
+        int pageSize = 2;
+        String url = "/employees";
+        Employee employee1 = new Employee("mht", 50, "male", 100000);
+        Employee employee2 = new Employee("mht", 50, "male", 100000);
+
+        Employee savedEmployee1 = employeeRepository.save(employee1);
+        Employee savedEmployee2 = employeeRepository.save(employee2);
+//        when then
+        mockMvc.perform(get(url)
+                .param("page", String.valueOf(page))
+                .param("pageSize", String.valueOf(pageSize)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(pageSize)))
+                .andExpect(jsonPath("$[0].id").value(savedEmployee1.getId()))
+                .andExpect(jsonPath("$[1].id").value(savedEmployee2.getId()));
+    }
 }
