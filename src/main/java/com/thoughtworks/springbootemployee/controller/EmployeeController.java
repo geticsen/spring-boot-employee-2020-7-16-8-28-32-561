@@ -1,6 +1,9 @@
 package com.thoughtworks.springbootemployee.controller;
 
+import com.thoughtworks.springbootemployee.dto.EmployeeRequest;
+import com.thoughtworks.springbootemployee.dto.EmployeeResponse;
 import com.thoughtworks.springbootemployee.exception.NoSuchDataException;
+import com.thoughtworks.springbootemployee.mapper.EmployeeMapper;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.model.EmployeeData;
 import com.thoughtworks.springbootemployee.service.EmployeeService;
@@ -42,8 +45,9 @@ public class EmployeeController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Employee addEmployee(@RequestBody Employee employee) {
-        if (employee != null) {
+    public EmployeeResponse addEmployee(@RequestBody EmployeeRequest employeeRequest) {
+        if (employeeRequest != null) {
+            Employee employee = new EmployeeMapper().convertEmployeeRequestToEmployee(employeeRequest);
             return employeeService.addEmployee(employee);
         }
         return null;

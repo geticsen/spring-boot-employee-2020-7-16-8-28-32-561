@@ -1,6 +1,8 @@
 package com.thoughtworks.springbootemployee.service;
 
+import com.thoughtworks.springbootemployee.dto.EmployeeResponse;
 import com.thoughtworks.springbootemployee.exception.NoSuchDataException;
+import com.thoughtworks.springbootemployee.mapper.EmployeeMapper;
 import com.thoughtworks.springbootemployee.message.ResponseMessage;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
@@ -39,8 +41,8 @@ public class EmployeeService {
         return employeeRepository.findEmployeesByGender(gender);
     }
 
-    public Employee addEmployee(Employee employee) {
-        return employeeRepository.save(employee);
+    public EmployeeResponse addEmployee(Employee employee) {
+        return new EmployeeMapper().convertEmployeeToEmployeeResponse(employeeRepository.save(employee));
     }
 
     public Employee updateEmployee(int employeeID, Employee updateEmployee) throws NoSuchDataException {
