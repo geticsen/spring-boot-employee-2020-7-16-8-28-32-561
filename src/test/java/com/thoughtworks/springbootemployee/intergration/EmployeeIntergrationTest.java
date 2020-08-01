@@ -139,7 +139,7 @@ public class EmployeeIntergrationTest {
 //        given
         int page = 1;
         int pageSize = 2;
-        String url = "/employees?page="+page+ "&pageSize=" +pageSize;
+        String url = "/employees?page=" + page + "&pageSize=" + pageSize;
         Employee employee1 = new Employee("mht", 50, "male", 100000);
         Employee employee2 = new Employee("mht", 50, "male", 100000);
 
@@ -152,11 +152,12 @@ public class EmployeeIntergrationTest {
                 .andExpect(jsonPath("$[0].id").value(savedEmployee1.getId()))
                 .andExpect(jsonPath("$[1].id").value(savedEmployee2.getId()));
     }
+
     @Test
     void should_return_male_employees_when_get_employees_by_male_given_male() throws Exception {
 //        given
         String gender = "male";
-        String url = "/employees?gender="+gender;
+        String url = "/employees?gender=" + gender;
         Employee employee1 = new Employee("mht", 50, "male", 100000);
         Employee employee2 = new Employee("jack ma", 50, "female", 111111);
 
@@ -169,4 +170,19 @@ public class EmployeeIntergrationTest {
                 .andExpect(jsonPath("$[0].gender").value(gender));
     }
 
+    @Test
+    void should_return_employee_when_get_employee_given_employee_id() throws Exception {
+        //        given
+        Employee employee = new Employee("mht", 50, "male", 100000);
+        Employee savedEmployee = employeeRepository.save(employee);
+        String url = "/employees/" + savedEmployee.getId();
+//        when then
+        mockMvc.perform(get(url))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(savedEmployee.getId()))
+                .andExpect(jsonPath("$.name").value(savedEmployee.getName()))
+                .andExpect(jsonPath("$.age").value(savedEmployee.getAge()))
+                .andExpect(jsonPath("$.gender").value(savedEmployee.getGender()))
+                .andExpect(jsonPath("$.salary").value(savedEmployee.getSalary()));
+    }
 }
