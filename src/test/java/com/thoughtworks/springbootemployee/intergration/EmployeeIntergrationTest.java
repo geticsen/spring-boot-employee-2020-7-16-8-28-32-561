@@ -152,5 +152,21 @@ public class EmployeeIntergrationTest {
                 .andExpect(jsonPath("$[0].id").value(savedEmployee1.getId()))
                 .andExpect(jsonPath("$[1].id").value(savedEmployee2.getId()));
     }
+    @Test
+    void should_return_male_employees_when_get_employees_by_male_given_male() throws Exception {
+//        given
+        String gender = "male";
+        String url = "/employees?gender="+gender;
+        Employee employee1 = new Employee("mht", 50, "male", 100000);
+        Employee employee2 = new Employee("jack ma", 50, "female", 111111);
+
+        Employee savedEmployee1 = employeeRepository.save(employee1);
+        Employee savedEmployee2 = employeeRepository.save(employee2);
+//        when then
+        mockMvc.perform(get(url))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].gender").value(gender));
+    }
 
 }
