@@ -68,7 +68,6 @@ public class EmployeeServiceTest {
     @Test
     void should_return_specify_gender_employees_when_get_employees_given_gender() {
 //        given
-        //todo 准备数据 不使用筛选逻辑
         String gender = "male";
         List<Employee> employees = new EmployeeData().getEmployees();
         EmployeeRepository employeeRepository = mock(EmployeeRepository.class);

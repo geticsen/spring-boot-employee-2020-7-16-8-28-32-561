@@ -8,6 +8,7 @@ import com.thoughtworks.springbootemployee.repository.CompanyRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
@@ -35,7 +36,7 @@ public class CompanyServiceTest {
 
     @Test
     void should_return_specify_company_when_get_company_given_company_id() {
-        //        given
+//        given
         int companyId = 1;
         Company filterCompany = new CompanyData().getCompanies().stream()
                 .filter(company -> company.getId() == companyId).findFirst().orElse(null);
@@ -47,6 +48,7 @@ public class CompanyServiceTest {
 //        then
         assert filterCompany != null;
         assertEquals(filterCompany.getId(), getCompany.getId());
+
     }
     @Test
     void should_get_all_employees_when_get_employees_given_company_id() {
@@ -73,7 +75,8 @@ public class CompanyServiceTest {
         List<Company> companies = new CompanyData().getCompanies();
         List<Company> subCompanies = companies.subList((page - 1) * pageSize, page * pageSize);
         CompanyRepository companyRepository = mock(CompanyRepository.class);
-        given(companyRepository.findAll(PageRequest.of(page,pageSize))).willReturn((Page<Company>) subCompanies);
+        Page<Company> subCompaniesPage  =new PageImpl<>(subCompanies,PageRequest.of(page-1,pageSize),subCompanies.size());
+        given(companyRepository.findAll(PageRequest.of(page-1,pageSize))).willReturn(subCompaniesPage);
         CompanyService companyService = new CompanyService(companyRepository);
 //        when
         Page<Company> getCompanies = companyService.getCompaniesByPageAndPageSize(page,pageSize);
