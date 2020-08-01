@@ -12,8 +12,11 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.util.MultiValueMap;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -136,19 +139,18 @@ public class EmployeeIntergrationTest {
 //        given
         int page = 1;
         int pageSize = 2;
-        String url = "/employees";
+        String url = "/employees?page="+page+ "&pageSize=" +pageSize;
         Employee employee1 = new Employee("mht", 50, "male", 100000);
         Employee employee2 = new Employee("mht", 50, "male", 100000);
 
         Employee savedEmployee1 = employeeRepository.save(employee1);
         Employee savedEmployee2 = employeeRepository.save(employee2);
 //        when then
-        mockMvc.perform(get(url)
-                .param("page", String.valueOf(page))
-                .param("pageSize", String.valueOf(pageSize)))
+        mockMvc.perform(get(url))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(pageSize)))
                 .andExpect(jsonPath("$[0].id").value(savedEmployee1.getId()))
                 .andExpect(jsonPath("$[1].id").value(savedEmployee2.getId()));
     }
+
 }

@@ -25,7 +25,7 @@ public class EmployeeController {
                                          @RequestParam(name = "gender", required = false) String gender) {
         List<Employee> employees = new ArrayList<>();
         if (page != null && pageSize != null) {
-            employees = employeeService.getEmployeeByPageAndPageSize(page, pageSize).getContent();
+            employees = employeeService.getEmployeeByPageAndPageSize(page-1, pageSize).getContent();
         } else if (gender != null) {
             employees = employeeService.getEmployeeByGender(gender);
         } else {

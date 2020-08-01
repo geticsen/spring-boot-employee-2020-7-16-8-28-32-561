@@ -1,5 +1,5 @@
-create table employee(
+create table company(
     id int AUTO_INCREMENT primary key ,
     `company_name` varchar(255),
-    employeesNumber int
+    employees_number int
  );
