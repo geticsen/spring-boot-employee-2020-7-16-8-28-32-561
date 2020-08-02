@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.thoughtworks.springbootemployee.mapper.EmployeeMapper.convertEmployeeRequestToEmployee;
+
 @RestController
 @RequestMapping("/employees")
 public class EmployeeController {
@@ -47,7 +49,7 @@ public class EmployeeController {
     @ResponseStatus(HttpStatus.CREATED)
     public EmployeeResponse addEmployee(@RequestBody EmployeeRequest employeeRequest) {
         if (employeeRequest != null) {
-            Employee employee = new EmployeeMapper().convertEmployeeRequestToEmployee(employeeRequest);
+            Employee employee = convertEmployeeRequestToEmployee(employeeRequest);
             return employeeService.addEmployee(employee);
         }
         return null;

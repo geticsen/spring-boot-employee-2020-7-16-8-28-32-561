@@ -42,7 +42,7 @@ public class EmployeeService {
     }
 
     public EmployeeResponse addEmployee(Employee employee) {
-        return new EmployeeMapper().convertEmployeeToEmployeeResponse(employeeRepository.save(employee));
+        return EmployeeMapper.convertEmployeeToEmployeeResponse(employeeRepository.save(employee));
     }
 
     public Employee updateEmployee(int employeeID, Employee updateEmployee) throws NoSuchDataException {

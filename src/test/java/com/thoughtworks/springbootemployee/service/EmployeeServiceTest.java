@@ -1,10 +1,12 @@
 package com.thoughtworks.springbootemployee.service;
 
 import com.thoughtworks.springbootemployee.exception.NoSuchDataException;
+import com.thoughtworks.springbootemployee.mapper.EmployeeMapper;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.model.EmployeeData;
 import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -89,7 +91,8 @@ public class EmployeeServiceTest {
         given(employeeRepository.save(employee)).willReturn(employee);
         EmployeeService employeeService = new EmployeeService(employeeRepository);
 //        when
-        Employee createdEmployee = employeeService.addEmployee(employee);
+        Employee createdEmployee =new Employee();
+        BeanUtils.copyProperties(employeeService.addEmployee(employee),createdEmployee);  ;
 //        then
         assertEquals(employee, createdEmployee);
     }
