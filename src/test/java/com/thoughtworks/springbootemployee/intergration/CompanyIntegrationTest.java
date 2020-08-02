@@ -77,4 +77,19 @@ public class CompanyIntegrationTest {
                 .andExpect(jsonPath("$[0].id").value(savedEmployee.getId()))
                 .andExpect(jsonPath("$[0].name").value(savedEmployee.getName()));
     }
+
+    @Test
+    void should_return_companies_when_get_companies_given_page_and_page_size() throws Exception {
+//        given
+        int page = 1;
+        int pageSize = 1;
+        Company company1 = new Company(0,"oocl", 2888);
+        Company company2 = new Company(1,"ali", 0);
+        Company savedCompany1 = companyRepository.save(company1);
+        Company savedCompany2 = companyRepository.save(company2);
+//        when then
+        mockMvc.perform(get("/companies?page=" + page+ "&pageSize="+pageSize))
+                .andExpect(jsonPath("$",hasSize(pageSize)))
+                .andExpect(jsonPath("$[0].id").value(savedCompany1.getId()));
+    }
 }
