@@ -16,8 +16,7 @@ import javax.print.attribute.standard.Media;
 import java.util.ArrayList;
 
 import static org.hamcrest.Matchers.hasSize;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -111,6 +110,25 @@ public class CompanyIntegrationTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(companyString))
                 .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.companyName").value("dz"))
+                .andExpect(jsonPath("$.employeesNumber").value(1000));
+    }
+
+    @Test
+    void should_return_mmodify_company_when_put_company_info_given_company_info() throws Exception {
+        //        given
+        Company company = new Company(1,"ali",30);
+        Company savedCompany = companyRepository.save(company);
+        String companyInfo = "{\n" +
+                "\"id\": "+savedCompany.getId()+",\n" +
+                "\"companyName\": \"dz\",\n" +
+                "\"employeesNumber\": 1000\n" +
+                "}";
+//        when then
+        mockMvc.perform(put("/companies/"+ savedCompany.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(companyInfo))
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$.companyName").value("dz"))
                 .andExpect(jsonPath("$.employeesNumber").value(1000));
     }
