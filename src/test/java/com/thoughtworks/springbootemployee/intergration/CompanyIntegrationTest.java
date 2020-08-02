@@ -9,12 +9,15 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import javax.print.attribute.standard.Media;
 import java.util.ArrayList;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -89,7 +92,26 @@ public class CompanyIntegrationTest {
         Company savedCompany2 = companyRepository.save(company2);
 //        when then
         mockMvc.perform(get("/companies?page=" + page+ "&pageSize="+pageSize))
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$",hasSize(pageSize)))
                 .andExpect(jsonPath("$[0].id").value(savedCompany1.getId()));
+    }
+
+    @Test
+    void should_return_company_when_post_company_given_company() throws Exception {
+//        given
+        String companyString = "{\n" +
+                "\"id\": 2,\n" +
+                "\"Employees\": null,\n" +
+                "\"companyName\": \"dz\",\n" +
+                "\"employeesNumber\": 1000\n" +
+                "}";
+//        when then
+        mockMvc.perform(post("/companies")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(companyString))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.companyName").value("dz"))
+                .andExpect(jsonPath("$.employeesNumber").value(1000));
     }
 }
